@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="UTF_8"?>
+<Scene name="level_7">
+  <GameObject name="Main Camera" activeSelf="True" instanceID="18702">
+    <Component name="Transform" nameSpace="UnityEngine" instanceID="18712">
+      <Position x="4" y="-3" z="-10" />
+      <LocalPosition x="4" y="-3" z="-10" />
+      <Rotation x="0" y="0" z="0" />
+      <LocalRotation x="0" y="0" z="0" />
+      <LossyScale x="1" y="1" z="1" />
+      <LocalScale x="1" y="1" z="1" />
+    </Component>
+    <Component name="Camera" nameSpace="UnityEngine" instanceID="18710" enabled="True" />
+    <Component name="GUILayer" nameSpace="UnityEngine" instanceID="18708" enabled="True" />
+    <Component name="FlareLayer" nameSpace="UnityEngine" instanceID="18706" enabled="True" />
+    <Component name="AudioListener" nameSpace="UnityEngine" instanceID="18704" enabled="True" />
+  </GameObject>
+  <GameObject name="b2World" activeSelf="True" instanceID="18694">
+    <Component name="Transform" nameSpace="UnityEngine" instanceID="18700">
+      <Position x="4" y="-3" z="0" />
+      <LocalPosition x="4" y="-3" z="0" />
+      <Rotation x="0" y="0" z="0" />
+      <LocalRotation x="0" y="0" z="0" />
+      <LossyScale x="1" y="1" z="1" />
+      <LocalScale x="1" y="1" z="1" />
+    </Component>
+    <Component name="b2WorldObject" nameSpace="UnityEngine" instanceID="18698" enabled="True">
+      <Gravity x="0" y="-30" />
+      <AllowSleep>True</AllowSleep>
+      <Dt>0.01</Dt>
+      <VelocityIterations>128</VelocityIterations>
+      <PositionIterations>128</PositionIterations>
+    </Component>
+    <Component name="b2DebugDrag" nameSpace="UnityEngine" instanceID="18696" enabled="True" />
+  </GameObject>
+</Scene>

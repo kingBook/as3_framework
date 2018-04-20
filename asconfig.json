@@ -1,0 +1,19 @@
+{
+    "files":["src/g/Main.as"],
+	"compilerOptions": {
+        "debug": true,
+        "library-path":["lib"],
+        "output": "debug.swf",
+		"source-path": ["src"],
+		"strict": true,
+		"default-frame-rate": 30,
+        "default-size": {
+            "width": 800,
+            "height": 600
+        },
+        "verbose-stacktraces": true,
+        "swf-version": 16,
+        "target-player": "11.3"
+	},
+    "additionalOptions": "-benchmark=false -static-link-runtime-shared-libraries=true"
+}

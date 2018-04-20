@@ -1,0 +1,1 @@
+package framework.b2Editor{	/**UserData组件中的B2BodyObject类型属性，只用于内部计算与及转换到实际链接的Flash-b2Body*/	public class B2BodyObjectProperty{		public var instanceID:String=null;//null | instanceID		public function B2BodyObjectProperty(instanceID:String){			this.instanceID=instanceID;		}			};}

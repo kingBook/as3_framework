@@ -1,0 +1,16 @@
+{
+    // Use IntelliSense to learn about possible SWF debug attributes.
+    // Hover to view descriptions of existing attributes.
+	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+	"version": "0.2.0",
+    "configurations": [
+		{
+			//"preLaunchTask": "build-debug",
+			"internalConsoleOptions": "openOnSessionStart",
+			"type": "swf",
+			"request": "launch",
+			"name": "Launch SWF",
+			"program": "${workspaceRoot}/debug.swf"
+		}
+    ]
+}

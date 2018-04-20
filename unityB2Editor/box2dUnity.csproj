@@ -1,0 +1,218 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.20506</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F6875F1D-EF1D-C87C-816A-D108DCBFFDAD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Assembly-CSharp</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
+    <CompilerResponseFile></CompilerResponseFile>
+    <UnityProjectType>Game:1</UnityProjectType>
+    <UnityBuildTarget>Android:13</UnityBuildTarget>
+    <UnityVersion>2017.1.0b8</UnityVersion>
+    <RootNamespace></RootNamespace>
+    <LangVersion>4</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Temp\UnityVS_bin\Debug\</OutputPath>
+    <IntermediateOutputPath>Temp\UnityVS_obj\Debug\</IntermediateOutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DefineConstants>DEBUG;TRACE;UNITY_5_3_OR_NEWER;UNITY_5_4_OR_NEWER;UNITY_5_5_OR_NEWER;UNITY_5_6_OR_NEWER;UNITY_2017_1_OR_NEWER;UNITY_2017_1_0;UNITY_2017_1;UNITY_2017;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_GENERICS;ENABLE_PVR_GI;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_RUNTIME_NAVMESH_BUILDING;ENABLE_SPRITERENDERER_FLIPPING;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_RAKNET;ENABLE_DIRECTOR;ENABLE_UNET;ENABLE_LZMA;ENABLE_UNITYEVENTS;ENABLE_WEBCAM;ENABLE_WWW;ENABLE_CLOUD_SERVICES_COLLAB;ENABLE_CLOUD_SERVICES_COLLAB_SOFTLOCKS;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_HUB;ENABLE_CLOUD_PROJECT_ID;ENABLE_CLOUD_SERVICES_USE_WEBREQUEST;ENABLE_CLOUD_SERVICES_UNET;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_CLOUD_LICENSE;ENABLE_WEBSOCKET_CLIENT;ENABLE_DIRECTOR_AUDIO;ENABLE_TIMELINE;ENABLE_EDITOR_METRICS;ENABLE_EDITOR_METRICS_CACHING;ENABLE_NATIVE_ARRAY;ENABLE_SPRITE_MASKING;INCLUDE_DYNAMIC_GI;INCLUDE_GI;ENABLE_MONO_BDWGC;PLATFORM_SUPPORTS_MONO;INCLUDE_PUBNUB;ENABLE_PLAYMODE_TESTS_RUNNER;ENABLE_VIDEO;ENABLE_RMGUI;ENABLE_CUSTOM_RENDER_TEXTURE;ENABLE_STYLE_SHEETS;PLATFORM_ANDROID;UNITY_ANDROID;UNITY_ANDROID_API;ENABLE_SUBSTANCE;ENABLE_EGL;ENABLE_NETWORK;ENABLE_RUNTIME_GI;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_UNITYWEBREQUEST;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_CRASH_REPORTING;PLATFORM_SUPPORTS_ADS_ID;UNITY_CAN_SHOW_SPLASH_SCREEN;ENABLE_VR;ENABLE_UNITYADS_RUNTIME;UNITY_UNITYADS_API;ENABLE_MONO;NET_2_0_SUBSET;ENABLE_PROFILER;DEBUG;TRACE;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_WIN;ENABLE_NATIVE_ARRAY_CHECKS;UNITY_TEAM_LICENSE;ENABLE_VSTU;UNITY_PRO_LICENSE;UNITY_HAS_GOOGLEVR</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Temp\UnityVS_bin\Release\</OutputPath>
+    <IntermediateOutputPath>Temp\UnityVS_obj\Release\</IntermediateOutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DefineConstants>TRACE;UNITY_5_3_OR_NEWER;UNITY_5_4_OR_NEWER;UNITY_5_5_OR_NEWER;UNITY_5_6_OR_NEWER;UNITY_2017_1_OR_NEWER;UNITY_2017_1_0;UNITY_2017_1;UNITY_2017;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_GENERICS;ENABLE_PVR_GI;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_RUNTIME_NAVMESH_BUILDING;ENABLE_SPRITERENDERER_FLIPPING;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_RAKNET;ENABLE_DIRECTOR;ENABLE_UNET;ENABLE_LZMA;ENABLE_UNITYEVENTS;ENABLE_WEBCAM;ENABLE_WWW;ENABLE_CLOUD_SERVICES_COLLAB;ENABLE_CLOUD_SERVICES_COLLAB_SOFTLOCKS;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_HUB;ENABLE_CLOUD_PROJECT_ID;ENABLE_CLOUD_SERVICES_USE_WEBREQUEST;ENABLE_CLOUD_SERVICES_UNET;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_CLOUD_LICENSE;ENABLE_WEBSOCKET_CLIENT;ENABLE_DIRECTOR_AUDIO;ENABLE_TIMELINE;ENABLE_EDITOR_METRICS;ENABLE_EDITOR_METRICS_CACHING;ENABLE_NATIVE_ARRAY;ENABLE_SPRITE_MASKING;INCLUDE_DYNAMIC_GI;INCLUDE_GI;ENABLE_MONO_BDWGC;PLATFORM_SUPPORTS_MONO;INCLUDE_PUBNUB;ENABLE_PLAYMODE_TESTS_RUNNER;ENABLE_VIDEO;ENABLE_RMGUI;ENABLE_CUSTOM_RENDER_TEXTURE;ENABLE_STYLE_SHEETS;PLATFORM_ANDROID;UNITY_ANDROID;UNITY_ANDROID_API;ENABLE_SUBSTANCE;ENABLE_EGL;ENABLE_NETWORK;ENABLE_RUNTIME_GI;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_UNITYWEBREQUEST;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_CRASH_REPORTING;PLATFORM_SUPPORTS_ADS_ID;UNITY_CAN_SHOW_SPLASH_SCREEN;ENABLE_VR;ENABLE_UNITYADS_RUNTIME;UNITY_UNITYADS_API;ENABLE_MONO;NET_2_0_SUBSET;ENABLE_PROFILER;DEBUG;TRACE;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_WIN;ENABLE_NATIVE_ARRAY_CHECKS;UNITY_TEAM_LICENSE;ENABLE_VSTU;UNITY_PRO_LICENSE;UNITY_HAS_GOOGLEVR</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.XML" />
+    <Reference Include="System.Core" />
+    <Reference Include="Boo.Lang" />
+    <Reference Include="UnityScript.Lang" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="UnityEditor">
+      <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>Library\UnityAssemblies\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Networking">
+      <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TestRunner">
+      <HintPath>Library\UnityAssemblies\UnityEngine.TestRunner.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>Library\UnityAssemblies\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Timeline">
+      <HintPath>Library\UnityAssemblies\UnityEngine.Timeline.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Analytics">
+      <HintPath>Library\UnityAssemblies\UnityEngine.Analytics.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.HoloLens">
+      <HintPath>Library\UnityAssemblies\UnityEngine.HoloLens.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Xcode">
+      <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Common">
+      <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Common.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\BaseMain.cs" />
+    <Compile Include="Assets\BodyGameObj.cs" />
+    <Compile Include="Assets\Box2D\b2Namesapce.cs" />
+    <Compile Include="Assets\Box2D\Box2DSeparator\b2Separator.cs" />
+    <Compile Include="Assets\Box2D\Collision\b2AABB.cs" />
+    <Compile Include="Assets\Box2D\Collision\b2Bound.cs" />
+    <Compile Include="Assets\Box2D\Collision\b2BoundValues.cs" />
+    <Compile Include="Assets\Box2D\Collision\b2BroadPhase.cs" />
+    <Compile Include="Assets\Box2D\Collision\b2Collision.cs" />
+    <Compile Include="Assets\Box2D\Collision\b2ContactID.cs" />
+    <Compile Include="Assets\Box2D\Collision\b2ContactPoint.cs" />
+    <Compile Include="Assets\Box2D\Collision\b2Distance.cs" />
+    <Compile Include="Assets\Box2D\Collision\b2DistanceInput.cs" />
+    <Compile Include="Assets\Box2D\Collision\b2DistanceOutput.cs" />
+    <Compile Include="Assets\Box2D\Collision\b2DistanceProxy.cs" />
+    <Compile Include="Assets\Box2D\Collision\b2DynamicTree.cs" />
+    <Compile Include="Assets\Box2D\Collision\b2DynamicTreeBroadPhase.cs" />
+    <Compile Include="Assets\Box2D\Collision\b2DynamicTreeNode.cs" />
+    <Compile Include="Assets\Box2D\Collision\b2DynamicTreePair.cs" />
+    <Compile Include="Assets\Box2D\Collision\b2Manifold.cs" />
+    <Compile Include="Assets\Box2D\Collision\b2ManifoldPoint.cs" />
+    <Compile Include="Assets\Box2D\Collision\b2OBB.cs" />
+    <Compile Include="Assets\Box2D\Collision\b2Pair.cs" />
+    <Compile Include="Assets\Box2D\Collision\b2PairManager.cs" />
+    <Compile Include="Assets\Box2D\Collision\b2Point.cs" />
+    <Compile Include="Assets\Box2D\Collision\b2Proxy.cs" />
+    <Compile Include="Assets\Box2D\Collision\b2RayCastInput.cs" />
+    <Compile Include="Assets\Box2D\Collision\b2RayCastOutput.cs" />
+    <Compile Include="Assets\Box2D\Collision\b2Segment.cs" />
+    <Compile Include="Assets\Box2D\Collision\b2SeparationFunction.cs" />
+    <Compile Include="Assets\Box2D\Collision\b2Simplex.cs" />
+    <Compile Include="Assets\Box2D\Collision\b2SimplexCache.cs" />
+    <Compile Include="Assets\Box2D\Collision\b2SimplexVertex.cs" />
+    <Compile Include="Assets\Box2D\Collision\b2TimeOfImpact.cs" />
+    <Compile Include="Assets\Box2D\Collision\b2TOIInput.cs" />
+    <Compile Include="Assets\Box2D\Collision\b2WorldManifold.cs" />
+    <Compile Include="Assets\Box2D\Collision\ClipVertex.cs" />
+    <Compile Include="Assets\Box2D\Collision\Features.cs" />
+    <Compile Include="Assets\Box2D\Collision\IBroadPhase.cs" />
+    <Compile Include="Assets\Box2D\Collision\Shapes\b2CircleShape.cs" />
+    <Compile Include="Assets\Box2D\Collision\Shapes\b2EdgeChainDef.cs" />
+    <Compile Include="Assets\Box2D\Collision\Shapes\b2EdgeShape.cs" />
+    <Compile Include="Assets\Box2D\Collision\Shapes\b2MassData.cs" />
+    <Compile Include="Assets\Box2D\Collision\Shapes\b2PolygonShape.cs" />
+    <Compile Include="Assets\Box2D\Collision\Shapes\b2Shape.cs" />
+    <Compile Include="Assets\Box2D\Common\b2Color.cs" />
+    <Compile Include="Assets\Box2D\Common\b2Settings.cs" />
+    <Compile Include="Assets\Box2D\Common\Math\b2Mat22.cs" />
+    <Compile Include="Assets\Box2D\Common\Math\b2Mat33.cs" />
+    <Compile Include="Assets\Box2D\Common\Math\b2Math.cs" />
+    <Compile Include="Assets\Box2D\Common\Math\b2Sweep.cs" />
+    <Compile Include="Assets\Box2D\Common\Math\b2Transform.cs" />
+    <Compile Include="Assets\Box2D\Common\Math\b2Vec2.cs" />
+    <Compile Include="Assets\Box2D\Common\Math\b2Vec3.cs" />
+    <Compile Include="Assets\Box2D\Components\b2BodyObject.cs" />
+    <Compile Include="Assets\Box2D\Components\b2BodyUserData.cs" />
+    <Compile Include="Assets\Box2D\Components\b2DebugDrag.cs" />
+    <Compile Include="Assets\Box2D\Components\b2JointObject.cs" />
+    <Compile Include="Assets\Box2D\Components\b2RevoluteJointObject.cs" />
+    <Compile Include="Assets\Box2D\Components\b2RopeJointObject.cs" />
+    <Compile Include="Assets\Box2D\Components\b2WorldObject.cs" />
+    <Compile Include="Assets\Box2D\Delegates\b2Delegates.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\b2Body.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\b2BodyDef.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\b2ContactFilter.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\b2ContactImpulse.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\b2ContactListener.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\b2ContactManager.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\b2DebugDraw.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\b2DestructionListener.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\b2FilterData.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\b2Fixture.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\b2FixtureDef.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\b2Island.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\b2TimeStep.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\b2World.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Contacts\b2CircleContact.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Contacts\b2Contact.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Contacts\b2ContactConstraint.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Contacts\b2ContactConstraintPoint.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Contacts\b2ContactEdge.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Contacts\b2ContactFactory.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Contacts\b2ContactRegister.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Contacts\b2ContactResult.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Contacts\b2ContactSolver.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Contacts\b2EdgeAndCircleContact.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Contacts\b2NullContact.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Contacts\b2PolyAndCircleContact.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Contacts\b2PolyAndEdgeContact.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Contacts\b2PolygonContact.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Contacts\b2PositionSolverManifold.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Controllers\b2BuoyancyController.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Controllers\b2ConstantAccelController.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Controllers\b2ConstantForceController.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Controllers\b2Controller.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Controllers\b2ControllerEdge.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Controllers\b2GravityController.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Controllers\b2TensorDampingController.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Joints\b2DistanceJoint.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Joints\b2DistanceJointDef.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Joints\b2FrictionJoint.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Joints\b2FrictionJointDef.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Joints\b2GearJoint.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Joints\b2GearJointDef.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Joints\b2Jacobian.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Joints\b2Joint.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Joints\b2JointDef.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Joints\b2JointEdge.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Joints\b2LineJoint.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Joints\b2LineJointDef.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Joints\b2MouseJoint.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Joints\b2MouseJointDef.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Joints\b2PrismaticJoint.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Joints\b2PrismaticJointDef.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Joints\b2PulleyJoint.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Joints\b2PulleyJointDef.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Joints\b2RevoluteJoint.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Joints\b2RevoluteJointDef.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Joints\b2RopeJoint.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Joints\b2RopeJointDef.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Joints\b2WeldJoint.cs" />
+    <Compile Include="Assets\Box2D\Dynamics\Joints\b2WeldJointDef.cs" />
+    <Compile Include="Assets\helloWorld.cs" />
+    <Compile Include="Assets\testQuery.cs" />
+    <Compile Include="Assets\testRay.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\note.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="GenerateTargetFrameworkMonikerAttribute" />
+</Project>

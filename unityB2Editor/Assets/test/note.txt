@@ -1,0 +1,35 @@
+﻿Box2D.Collision.b2AABB RayCast();
+Box2D.Collision.Shapes.b2Proxy; --34---   public var pairs:Dictionary = new Dictionary();
+Box2D.Collision.Shapes.b2Proxy; --38---   public var userData:* = null;
+
+Box2D.Collision.b2BroadPhase; 162   //bounds.splice(upperIndex, 0, bounds[bounds.length - 1]);
+									//bounds.length--;
+									//bounds.splice(lowerIndex, 0, bounds[bounds.length - 1]);
+									//bounds.length--;
+									
+Box2D.Collision.b2PairManager RemovePair();   234   //delete proxy1.pairs[proxy2];
+													//delete proxy2.pairs[proxy1];
+
+
+
+b2World    617   		m_debugDraw.m_sprite.graphics.clear();
+
+
+b2Body
+
+
+/////////////////////////////
+b2DynamicTreeBroadPhase
+private void BufferMove(b2DynamicTreeNode proxy)
+{
+	m_moveBuffer[m_moveBuffer.Count] = proxy;
+}
+
+
+
+//b2DynamicTreeBroadPhase  127
+				//pair.proxyA = proxy < queryProxy?proxy:queryProxy;
+				//pair.proxyB = proxy >= queryProxy?proxy:queryProxy;
+				
+b2DynamicTreeBroadPhase   123
+									m_pairBuffer.Add(new b2DynamicTreePair());
