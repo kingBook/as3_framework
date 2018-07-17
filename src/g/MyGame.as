@@ -2,6 +2,7 @@
 	import flash.display.MovieClip;
 	import flash.display.Stage;
 	import flash.system.Capabilities;
+	import framework.debug.FPSDebug;
 	import framework.game.Game;
 	import framework.objs.GameObject;
 	import framework.system.LocalManager;

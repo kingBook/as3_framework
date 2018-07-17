@@ -16,6 +16,7 @@
 		private var _pageID:int;
 		private var _vx:Number;
 		private var _isDoSetPageing:Boolean;
+		public var enabledMouse:Boolean=true;
 		
 		/**
 		 * 创建一个x滑页
@@ -48,7 +49,9 @@
 		}
 		
 		private function mouseHandler(e:MouseEvent):void{
-			setMouseDown(e.type==MouseEvent.MOUSE_DOWN);
+			if(enabledMouse){
+				setMouseDown(e.type==MouseEvent.MOUSE_DOWN);
+			}
 		}
 		
 		private function onResize(e:Event=null):void{

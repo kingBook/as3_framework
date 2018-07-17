@@ -162,14 +162,26 @@
 		}
 		
 		/**全局坐标*/
-		public static function globalXY(disObj:DisplayObject, pt:Point = null):Point {
-			if (!disObj) throw new Error("FuncUtil->globalXY() 参数disObj不能为null");
-			if (!disObj.parent) throw new Error("FuncUtil->globalXY()传进的对象不在显示列表!");
-			var cpt:Point;
-			if (pt) cpt = pt;
-			else    cpt = new Point(disObj.x, disObj.y);
-			var gpt:Point = disObj.localToGlobal(cpt);
-			return gpt;
+		public static function globalXY(disObj:DisplayObject, localPt:Point = null,out:Point=null):Point {
+			if (!disObj) throw new Error("FuncUtil::globalXY() 参数disObj不能为null");
+			if (!disObj.parent) throw new Error("FuncUtil::globalXY()传进的对象不在显示列表!");
+			
+			if(!out)out=new Point(disObj.x,disObj.y);
+			else out.setTo(disObj.x,disObj.y);
+			
+			if(localPt){
+				out.x+=localPt.x;
+				out.y+=localPt.y;
+			}
+			var parentObj:DisplayObjectContainer=disObj.parent;
+			while(parentObj){
+				out.x*=parentObj.scaleX;
+				out.y*=parentObj.scaleY;
+				out.x+=parentObj.x;
+				out.y+=parentObj.y;
+				parentObj=parentObj.parent;
+			}
+			return out;
 		}
 		
 		private static var _pt:Point = new Point(0, 0);

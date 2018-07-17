@@ -16,7 +16,7 @@
 		protected var _flags:uint;
 		
 		protected var _body:b2Body;
-		private var _dropGroundCallback:Function=null;
+		protected var _dropGroundCallback:Function=null;
 		
 		public function applyImpulse(ix:Number=0,iy:Number=0):void{
 			_body.ApplyImpulse(b2Vec2.MakeOnce(ix,iy),_body.GetWorldCenter());

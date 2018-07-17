@@ -1,4 +1,4 @@
-package framework.system {
+﻿package framework.system {
 	import Box2D.Dynamics.b2DebugDraw;
 	import Box2D.Dynamics.b2World;
 	import flash.display.Sprite;
@@ -23,6 +23,8 @@ package framework.system {
 			super.init(info);
 			_sprite=new Sprite();
 			_sprite.name = "DebugDrawSprite";
+			_sprite.mouseChildren=false;
+			_sprite.mouseEnabled=false;
 			_game.global.layerMan.gameLayer.addChild(_sprite);
 			_debugDraw=new b2DebugDraw();
 			_debugDraw.SetSprite(_sprite);
