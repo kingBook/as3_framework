@@ -42,7 +42,7 @@
 		private var _curShakeId:uint;
 		private var _shakeTargetInitPos:Point=new Point();
 		private var _cameraTargetInitPos:Point=new Point();
-
+		private var _isAllowScorll:Boolean=true;
 		
 		public function MapCamera(){ super(); }
 		
@@ -110,17 +110,19 @@
 		
 		override protected function lateUpdate():void{
 			super.lateUpdate();
-			var vx:Number=0, vy:Number=0;
-			if(_bindMode==TARGET_MODE){//目标模式
-				_bindTargetsCenter||=new Point();
-				getTargetsCenter(_bindTargets,_bindTargetsCenter);
-				vx=(_bindTargetsCenter.x-_position.x)*_easing;
-				vy=(_bindTargetsCenter.y-_position.y)*_easing;
-				updatePosition(vx,vy);
-			}else if(_bindMode==POSITION_MODE){//位置模式
-				vx=(_targetPos.x-_position.x)*_easing;
-				vy=(_targetPos.y-_position.y)*_easing;
-				updatePosition(vx,vy);
+			if(_isAllowScorll){
+				var vx:Number=0, vy:Number=0;
+				if(_bindMode==TARGET_MODE){//目标模式
+					_bindTargetsCenter||=new Point();
+					getTargetsCenter(_bindTargets,_bindTargetsCenter);
+					vx=(_bindTargetsCenter.x-_position.x)*_easing;
+					vy=(_bindTargetsCenter.y-_position.y)*_easing;
+					updatePosition(vx,vy);
+				}else if(_bindMode==POSITION_MODE){//位置模式
+					vx=(_targetPos.x-_position.x)*_easing;
+					vy=(_targetPos.y-_position.y)*_easing;
+					updatePosition(vx,vy);
+				}
 			}
 		}
 			
@@ -208,6 +210,10 @@
 			_isShakeing=false;
 			_cameraTarget.parent.x=_shakeTargetInitPos.x;
 			_cameraTarget.parent.y=_shakeTargetInitPos.y;
+		}
+		
+		public function setAllowScorll(value:Boolean):void{
+			_isAllowScorll=value;
 		}
 
 		public function setEasing(value:Number):void{
