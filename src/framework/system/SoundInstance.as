@@ -12,7 +12,6 @@
 		private var _allowMultiple:Boolean;
 		private var _sound:Sound;
 		private var _mute:Boolean;
-		private var _volume:Number;
 		private var _isPlaying:Boolean;
 		private var _pausePos:Number;
 		
@@ -58,10 +57,11 @@
 		}
 		/**暂停*/
 		public function pause():SoundInstance{
-			if (_sc)return this;
-			_isPlaying=false;
-			_pausePos=_sc.position;
-			stopChannel(_sc);
+			if(_sc){
+				_isPlaying=false;
+				_pausePos=_sc.position;
+				stopChannel(_sc);
+			}
 			return this;
 		}
 		/**
@@ -70,7 +70,7 @@
 		 */
 		public function resume(forceStart:Boolean=false):SoundInstance {
 			var isPaused:Boolean=_sc &&_sound&&_pausePos>0;
-			if (isPaused||forceStart)play(_pausePos,_volume, _allowMultiple,_loops);
+			if (isPaused||forceStart)play(_pausePos,_st.volume, _allowMultiple,_loops);
 			return this;
 		}
 		/**
