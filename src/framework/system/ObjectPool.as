@@ -43,23 +43,21 @@
 			return Boolean(_dict[key]);
 		}
 		
-		public function clear():void{
-			for (var k:* in _dict) delete _dict[k];
+		public function clear(isDisposeBitmapData:Boolean=false):void{
+			for (var k:* in _dict){
+				if(isDisposeBitmapData){
+					var obj:*=_dict[k];
+					if(obj is BitmapData) (obj as BitmapData).dispose();
+				}
+				delete _dict[k];
+			}
 		}
 		
 		override protected function onDestroy():void{
 			if(_dict){
-				for each(var obj:* in _dict){
-					if(obj is BitmapData){
-						var bmd:BitmapData=obj as BitmapData;
-						if(bmd)bmd.dispose();
-					}
-				}
-				clear();
+				clear(true);
+				_dict=null;
 			}
-			
-			_dict=null;
-			
 			super.onDestroy();
 		}
 	};
