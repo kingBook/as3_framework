@@ -1,40 +1,25 @@
-﻿package framework.utils {
+﻿package framework.utils{
 	
-	/**
-	 * ...
-	 * @author kingBook
-	 */
-	public class RandomKb {
+	public class RandomKb{
 		
-		public function RandomKb() {
-			throw new Error("Random不可实例化！");
+		/**返回随机的true或false*/
+		public static function get boolean():Boolean{
+			return Math.random()<0.5;
 		}
 		
-		public static function get boolean():Boolean {
-			return Math.random() < 0.5;
+		/**返回随机的1或-1*/
+		public static function get wave():int{
+			return boolean?1:-1;
 		}
 		
-		public static function get wave():int {
-			return boolean ? 1 : -1;
+		/**返回结果是min~max闭区间的随机整数*/
+		public static function rangeInt(min:int,max:int):int{
+			return (Math.random()*(max-min)+min+0.5)|0;
 		}
 		
-		public static function integer(num:Number):int {
-			return Math.floor(Math.random() * num);
+		/**返回结果是min~max开区间的随机浮点数*/
+		public static function rangeFloat(min:Number,max:Number):Number{
+			return Math.random()*(max-min)+min;
 		}
-		
-		public static function number(num:Number):Number {
-			return Math.random() * num;
-		}
-		
-		public static function get probability():Number {
-			return Math.random() * 100;
-		}
-		
-		public static function range(min:Number, max:Number, integer:Boolean = true):Number {
-			var num:Number = Math.random() * (max - min) + min;
-			if (integer) num = int(num);
-			return num;
-		}
-	}
-
+	};
 }
