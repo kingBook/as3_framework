@@ -9,7 +9,7 @@
 	import g.MyData;
 	import g.events.MyEvent;
 	import g.objs.MyObj;
-
+	
 	/*地图的相机*/
 	public class MapCamera extends MyObj{
 		public static const MOVE:String="move";
@@ -20,12 +20,8 @@
 		public const CUSTOM_MOVE_MODE:uint=3;
 		
 		private var _easing:Number=0.2;
-		private var _xmin:int;
-		private var _xmax:int;
-		private var _ymin:int;
-		private var _ymax:int;
-		private var _halfSizeX:int;
-		private var _halfSizeY:int;
+		private var _min:Point;
+		private var _max:Point;
 		private var _bindMode:uint=NONE;
 		private var _position:Point;
 		private var _targetPos:Point;
@@ -34,25 +30,40 @@
 		private var _bindTargets:Array;
 		private var _bindTargetsCenter:Point;
 		private var _moveEvent:MyEvent;
-		private var _moveCompleteEevnt:MyEvent;
+		private var _moveCompleteEvent:MyEvent;
 		
 		private var _shakeCount:int;
 		private var _shakeMaxDistance:Number;
 		private var _isShakeing:Boolean;
 		private var _curShakeId:uint;
 		private var _shakeTargetInitPos:Point=new Point();
-		private var _cameraTargetInitPos:Point=new Point();
+		private var _cameraTargetInitPos:Point;
 		private var _isAllowScorll:Boolean=true;
+		
+		private var _focus:Point;
+		private var _mapSize:Point;
 		
 		public function MapCamera(){ super(); }
 		
-		public static function create(size:Point,mapWidth:Number,mapHeight:Number,cameraTarget:DisplayObject):MapCamera{
+		/**
+		 * 创建一个MapCamera
+		 * @param	size 一般情况下就是舞台的大小
+		 * @param	mapWidth 
+		 * @param	mapHeight 
+		 * @param	cameraTarget 要滚动的显示对象
+		 * @param	focusX 0.01~0.99
+		 * @param	focusY 0.01~0.99
+		 * @return
+		 */
+		public static function create(size:Point,mapWidth:Number,mapHeight:Number,cameraTarget:DisplayObject,focusX:Number=0.5,focusY:Number=0.5):MapCamera{
 			var game:Game=Game.getInstance();
 			var info:*={};
 			info.size=size;
 			info.mapWidth=mapWidth;
 			info.mapHeight=mapHeight;
 			info.cameraTarget=cameraTarget;
+			info.focusX=focusX;
+			info.focusY=focusY;
 			return game.createGameObj(new MapCamera(),info) as MapCamera;
 		}
 		
@@ -60,19 +71,33 @@
 			super.init(info);
 			_size=info.size;
 			_cameraTarget=info.cameraTarget;
-			_cameraTargetInitPos.x=_cameraTarget.x;
-			_cameraTargetInitPos.y=_cameraTarget.y;
-			_halfSizeX=_size.x>>1;
-			_halfSizeY=_size.y>>1;
+			_cameraTargetInitPos=new Point(_cameraTarget.x,_cameraTarget.y);
+			_mapSize=new Point(info.mapWidth,info.mapHeight);
 			
-			_xmin=_halfSizeX;
-			_xmax=info.mapWidth-_halfSizeX;
-			_xmax*=_game.global.main.scaleX;//添加主文档main的缩放量 edit 2018-03-05
-			_ymin=_halfSizeY;
-			_ymax=info.mapHeight-_halfSizeY;
-			_ymax*=_game.global.main.scaleY;//添加主文档main的缩放量 edit 2018-03-05
+			setFocus(info.focusX,info.focusY);
+		}
+		
+		/**
+		 * 设置聚焦点
+		 * @param	x 0.01~0.99
+		 * @param	y 0.01~0.99
+		 */
+		public function setFocus(x:Number=0.5,y:Number=0.5):void{
+			x=Math.min(Math.max(x,0.01),0.99);
+			y=Math.min(Math.max(y,0.01),0.99);
 			
-			_position=new Point(_halfSizeX,_halfSizeY);//相机默认在屏幕的中心
+			_focus||=new Point();
+			_focus.setTo(x,y);
+			
+			_min||=new Point();
+			_min.setTo(_size.x*_focus.x,_size.y*_focus.y);
+			_max||=new Point();
+			_max.setTo(_mapSize.x-_size.x*(1-_focus.x), _mapSize.y-_size.y*(1-_focus.y));
+			_max.x*=_game.global.main.scaleX;//添加主文档main的缩放量 edit 2018-03-05
+			_max.y*=_game.global.main.scaleY;//添加主文档main的缩放量 edit 2018-03-05
+			
+			_position||=new Point();
+			_position.setTo(int(_size.x*_focus.x),int(_size.y*_focus.y));
 		}
 		
 		/**绑定相机到一个位置上，位置可以每一帧改变, isRightNow:表示立即到这个位置不执行缓动*/
@@ -125,7 +150,7 @@
 				}
 			}
 		}
-			
+		
 		private function updatePosition(vx:Number,vy:Number):void{
 			if(Math.abs(vx)<1)vx=0;//防止中心两侧抖动
 			if(Math.abs(vy)<1)vy=0;//防止中心两侧抖动
@@ -134,8 +159,8 @@
 			vy=vy>=0?int(vy+0.9):int(vy-0.9);
 			var x:int=int(_position.x)+vx;
 			var y:int=int(_position.y)+vy;
-			if(x<_xmin)x=_xmin; else if(x>_xmax)x=_xmax;
-			if(y<_ymin)y=_ymin; else if(y>_ymax)y=_ymax;
+			x=Math.min(Math.max(x,_min.x),_max.x);
+			y=Math.min(Math.max(y,_min.y),_max.y);
 			vx=x-_position.x;
 			vy=y-_position.y;
 			if(vx!=0||vy!=0){
@@ -152,19 +177,19 @@
 			_moveEvent.info.vy=vy;
 			dispatchEvent(_moveEvent);
 		}
-
+		
 		private function dispatchMoveCompleteEvent():void{
-			_moveCompleteEevnt||=new MyEvent(MOVE_COMPLETE,{});
-			dispatchEvent(_moveCompleteEevnt);
+			_moveCompleteEvent||=new MyEvent(MOVE_COMPLETE,{});
+			dispatchEvent(_moveCompleteEvent);
 		}
 		
 		private function setPosition(x:int,y:int):void{
-			if(x<_xmin)x=_xmin; else if(x>_xmax)x=_xmax;
-			if(y<_ymin)y=_ymin; else if(y>_ymax)y=_ymax;
+			x=Math.min(Math.max(x,_min.x),_max.x);
+			y=Math.min(Math.max(y,_min.y),_max.y);
 			_position.x=x;
 			_position.y=y;
-			_cameraTarget.x=-(_position.x-_halfSizeX);
-			_cameraTarget.y=-(_position.y-_halfSizeY);
+			_cameraTarget.x=-(_position.x-int(_size.x*_focus.x));
+			_cameraTarget.y=-(_position.y-int(_size.y*_focus.y));
 		}
 		
 		/**返回多个目标的中心*/
@@ -185,7 +210,7 @@
 			outputPoint.x = x/count;
 			outputPoint.y = y/count;
 		}
-			
+		
 		/**摇动*/
 		public function shake(timeSecond:Number=0.5,maxDistance:Number=5):void{
 			if(_isShakeing) stopCurShake();
@@ -215,7 +240,7 @@
 		public function setAllowScorll(value:Boolean):void{
 			_isAllowScorll=value;
 		}
-
+		
 		public function setEasing(value:Number):void{
 			_easing=value;
 		}
@@ -234,8 +259,12 @@
 			_bindTargets=null;
 			_bindTargetsCenter=null;
 			_moveEvent=null;
-			_moveCompleteEevnt=null;
+			_moveCompleteEvent=null;
 			_shakeTargetInitPos=null;
+			_focus=null;
+			_mapSize=null;
+			_min=null;
+			_max=null;
 			super.onDestroy();
 		}
 		
