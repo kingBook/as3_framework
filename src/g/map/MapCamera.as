@@ -39,6 +39,7 @@
 		private var _shakeTargetInitPos:Point=new Point();
 		private var _cameraTargetInitPos:Point;
 		private var _isAllowScorll:Boolean=true;
+		private var _isAllowBackward:Boolean=true;
 		
 		private var _focus:Point;
 		private var _mapSize:Point;
@@ -150,8 +151,9 @@
 				}
 			}
 		}
-		
+			
 		private function updatePosition(vx:Number,vy:Number):void{
+			if(!_isAllowBackward && vx<0)return;
 			if(Math.abs(vx)<1)vx=0;//防止中心两侧抖动
 			if(Math.abs(vy)<1)vy=0;//防止中心两侧抖动
 			
@@ -243,6 +245,10 @@
 		
 		public function setEasing(value:Number):void{
 			_easing=value;
+		}
+		
+		public function setAllowBackward(value:Boolean):void{
+			_isAllowBackward=value;
 		}
 		
 		public function get size():Point{ return _size; }
