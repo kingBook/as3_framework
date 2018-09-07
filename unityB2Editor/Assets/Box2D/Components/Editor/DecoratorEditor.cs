@@ -187,13 +187,16 @@ public abstract class DecoratorEditor : Editor
         EditorInstance.OnPreviewSettings ();
     }
 
-#if UNITY_5||UNITY_5_0||UNITY_5_0_1||UNITY_2017
-    //5.x才有以下方法
+#if UNITY_4
+    
+#else
+	//5.x才有以下方法
     public override void ReloadPreviewInstances ()
     {
         EditorInstance.ReloadPreviewInstances ();
     }
 #endif
+
     public override Texture2D RenderStaticPreview (string assetPath, Object[] subAssets, int width, int height)
     {
         return EditorInstance.RenderStaticPreview (assetPath, subAssets, width, height);

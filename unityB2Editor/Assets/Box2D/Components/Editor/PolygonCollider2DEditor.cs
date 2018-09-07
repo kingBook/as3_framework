@@ -10,10 +10,10 @@ public class PolygonCollider2DEditor:Collider2DEditor{
     private PolygonCollider2D _polyColl;
     private Vector2[] _oldPoints;
 
-#if UNITY_5 || UNITY_5_0 || UNITY_5_0_1 || UNITY_2017
-    public PolygonCollider2DEditor() : base("PolygonCollider2DEditor") { }
+#if UNITY_4
+	public PolygonCollider2DEditor() : base("PolygonColliderEditor") { }
 #else
-    public PolygonCollider2DEditor() : base("PolygonColliderEditor") { }
+    public PolygonCollider2DEditor() : base("PolygonCollider2DEditor") { }
 #endif
 
 
