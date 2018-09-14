@@ -9,7 +9,9 @@ package g.components{
 			return gameObject.addComponent(FlashBehavior) as FlashBehavior;
 		}
 		
-		/**target必须有visible属性*/
+		private var _oldTargetAlpha:Number;
+		
+		/**target必须有alpha属性*/
 		public function flashHandler(target:*,time:Number=1.5,complete:Function=null,completeParams:Array=null):void{
 			_target=target;
 			_time=time;
@@ -17,23 +19,28 @@ package g.components{
 			_isFlashing=true;
 			_complete=complete;
 			_completeParams=completeParams;
+			_oldTargetAlpha=_target.alpha;
 		}
 		
 		override protected function update():void{
 			if(_count>0){
 				_count--;
-				_target.visible=!_target.visible;
+				if(_target.alpha>0)_target.alpha=0;
+				else _target.alpha=1;
 			}else{
 				if(_isFlashing){
 					_isFlashing=false;
-					_target.visible=true;
+					 _target.alpha=_oldTargetAlpha;
 					if(_complete!=null)_complete.apply(null,_completeParams);
 				}
 			}
 		}
 		
 		override protected function onDestroy():void{
-			_target=null;
+			if(_target){
+				_target.alpha=_oldTargetAlpha;
+				_target=null;
+			}
 			_complete=null;
 			_completeParams=null;
 			super.onDestroy();
