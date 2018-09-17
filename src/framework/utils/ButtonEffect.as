@@ -93,7 +93,7 @@ package framework.utils {
 		 * params:
 		 * 	color:uint;
 		 * --------------------------------------------
-		 * ButtonEffect.to(mc,{scale:{f:0.2}});
+		 * ButtonEffect.to(mc,{scale:{f:0.2},isSwapChildId:true});
 		 * scale:Object
 		 * params:
 		 *	f:Number;//0~1
