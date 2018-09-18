@@ -78,8 +78,8 @@ package g.components{
 			sp.graphics.lineStyle(_thickness,_lineColor);
 			var x:Number=0,y:Number=0;
 			while(true){
-				x+=RandomKb.range(10,20,true);
-				y=RandomKb.range(0,6,true)*RandomKb.wave;
+				x+=RandomKb.rangeInt(10,20);
+				y=RandomKb.rangeInt(0,6)*RandomKb.wave;
 				if(x>=len){ x=len; y=0; }
 				sp.graphics.lineTo(x,y);
 				if(x>=len)break;

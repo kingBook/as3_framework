@@ -49,9 +49,9 @@
 			
 			var x:Number,y:Number,speed:Number;
 			for(var i:int=0;i<total;i++){
-				x=RandomKb.range(xmin,xmax,false);
-				y=RandomKb.range(ymin,ymax,false);
-				speed=RandomKb.range(speedMin,speedMax,false);
+				x=RandomKb.rangeFloat(xmin,xmax);
+				y=RandomKb.rangeFloat(ymin,ymax);
+				speed=RandomKb.rangeFloat(speedMin,speedMax);
 				Cloud.create(defName,x,y,parent,speed,xmax);
 			}
 		}
@@ -73,7 +73,7 @@ class Cloud extends GameObject{
 	static public function create(defName:String,x:Number,y:Number,parent:Sprite,speed:Number, mapWidth:Number,depth:int=-1):Cloud{
 		var game:Game=Game.getInstance();
 		var clip:Clip=Clip.fromDefName(defName,true,true,parent,x,y,true);
-		clip.gotoAndStop(RandomKb.range(1,clip.totalFrames,true));
+		clip.gotoAndStop(RandomKb.rangeInt(1,clip.totalFrames));
 		if(depth<0)parent.addChild(clip);
 		else parent.addChildAt(clip,depth);
 		return game.createGameObj(new Cloud(),{clip:clip,speed:speed,mapWidth:mapWidth}) as Cloud;
