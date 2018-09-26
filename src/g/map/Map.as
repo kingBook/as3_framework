@@ -1,6 +1,7 @@
 ﻿package g.map{
 	import Box2D.Dynamics.b2Body;
 	import flash.display.DisplayObject;
+	import flash.display.MovieClip;
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.geom.Point;
@@ -10,6 +11,8 @@
 	import framework.objs.GameObject;
 	import framework.system.Box2dManager;
 	import framework.utils.Box2dUtil;
+	import framework.utils.LibUtil;
+	import g.Assets;
 	import g.MyData;
 	import g.objs.MapAnimClip;
 	import g.objs.MapBg;
@@ -20,7 +23,18 @@
 	import g.tiled.TilemapSortOrder;
 
 	public class Map extends MyObj{
-		protected var _mapModel:MapModel;
+		protected var _sceneXml:XML;
+		protected var _assetDatabaseXml:XML;
+		protected var _width:Number;
+		protected var _height:Number;
+		protected var _viewportW:Number;
+		protected var _viewportH:Number;
+		protected var _mc_wallfrontEff:MovieClip;
+		protected var _mc_wall:MovieClip;
+		protected var _mc_wallBehindEff:MovieClip;
+		protected var _mc_bgMiddle:MovieClip;
+		protected var _mc_bgBottom:MovieClip;
+		
 		protected var _camera:MapCamera;
 		protected var _unityB2Loader:UnityB2Loader;
 		protected var _box2dMan:Box2dManager;
@@ -34,7 +48,7 @@
 		}
 		
 		override protected function init(info:* = null):void{
-			createModel();
+			initData();
 			//创建相机
 			createCamera();
 			//创建背景
@@ -53,7 +67,15 @@
 			if(!MyData.isAIR) createMask();
 		}
 		
-		private function createModel():void{
+		private function initData():void{
+			var gameLevel:int=_myGame.myGlobal.gameLevel;
+			_sceneXml=MapData.getLevelXml(gameLevel);
+			_assetDatabaseXml=XML(Assets.getInstance().getFileWithName("assetDatabase.xml"));
+			
+			var data:*=MapData.getDataObj(gameLevel);
+			_width=data.size.width;
+			_height=data.size.height;
+			
 			var tmpW:int,tmpH:int;
 			if(MyData.isAIR){
 				tmpW=_game.global.stage.stageWidth;
@@ -62,22 +84,34 @@
 				tmpW=MyData.designW;
 				tmpH=MyData.designH;
 			}
-			_mapModel=MapModel.create(_myGame,tmpW,tmpH);
+			_viewportW=Math.min(width,tmpW);
+			_viewportH=Math.min(height,tmpH);
+			
+			_mc_wallfrontEff=LibUtil.getDefMovie(data.wallFrontEff.name);
+			_mc_wallfrontEff.gotoAndStop(data.wallFrontEff.frame);
+			_mc_wall=LibUtil.getDefMovie(data.wall.name);
+			_mc_wall.gotoAndStop(data.wall.frame);
+			_mc_wallBehindEff=LibUtil.getDefMovie(data.wallBehindEff.name);
+			_mc_wallBehindEff.gotoAndStop(data.wallBehindEff.frame);
+			_mc_bgMiddle=LibUtil.getDefMovie(data.bgMiddle.name);
+			_mc_bgMiddle.gotoAndStop(data.bgMiddle.frame);
+			_mc_bgBottom=LibUtil.getDefMovie(data.bgBottom.name);
+			_mc_bgBottom.gotoAndStop(data.bgBottom.frame);
 		}
 		
 		private function createCamera():void{
-			var cameraSize:Point=new Point(_mapModel.viewportW,_mapModel.viewportH);
+			var cameraSize:Point=new Point(_viewportW,_viewportH);
 			var cameraTarget:DisplayObject=_game.global.layerMan.gameLayer;
-			_camera=MapCamera.create(cameraSize,_mapModel.width,_mapModel.height,cameraTarget);
+			_camera=MapCamera.create(cameraSize,_width,_height,cameraTarget);
 		}
 		
 		private function createBg():void{
 			var sprite:Sprite=_game.global.layerMan.items0Layer;
-			if(_mapModel.mc_bgBottom.numChildren>0){
-				var mapBg0:MapBg=MapBg.create(_mapModel.mc_bgBottom,sprite,_camera,0.5,true);
+			if(_mc_bgBottom.numChildren>0){
+				var mapBg0:MapBg=MapBg.create(_mc_bgBottom,sprite,_camera,0.5,true);
 			}
-			if(_mapModel.mc_bgMiddle.numChildren>0){
-				var mapBg1:MapBg=MapBg.create(_mapModel.mc_bgMiddle,sprite,_camera,0.2,true);
+			if(_mc_bgMiddle.numChildren>0){
+				var mapBg1:MapBg=MapBg.create(_mc_bgMiddle,sprite,_camera,0.2,true);
 			}
 			//创建云朵
 			//CloudBackgroup.create("Cloud_view",0.5,2,0,this.width,20,this.height*0.5,mapBg0.sprite);
@@ -86,8 +120,8 @@
 		protected function createWorldEdgeBodies(offsetL:Number=0,offsetT:Number=0,offsetR:Number=0,offsetD:Number=0):Vector.<b2Body>{
 			var x:Number=offsetL;
 			var y:Number=offsetT;
-			var w:Number=_mapModel.width-offsetL+offsetR;
-			var h:Number=_mapModel.height-offsetT+offsetD;
+			var w:Number=_width-offsetL+offsetR;
+			var h:Number=_height-offsetT+offsetD;
 			var bodies:Vector.<b2Body>=Box2dUtil.createWrapWallBodies(x,y,w,h,_box2dMan.world,MyData.ptm_ratio);
 			var i:int=bodies.length;
 			while (--i>=0){
@@ -114,21 +148,21 @@
 		private function createWall(body:b2Body):void{
 			var sprite:Sprite=_game.global.layerMan.items2Layer;
 			//创建墙后的clip
-			if(_mapModel.mc_wallBehindEff.numChildren>0){
-				MapAnimClip.create(_mapModel.mc_wallBehindEff,sprite);
+			if(_mc_wallBehindEff.numChildren>0){
+				MapAnimClip.create(_mc_wallBehindEff,sprite);
 			}
 			//创建墙
-			if(_mapModel.mc_wall.numChildren>0){
-				MapWall.create(_mapModel.mc_wall,sprite,body);
+			if(_mc_wall.numChildren>0){
+				MapWall.create(_mc_wall,sprite,body);
 			}
 			//创建墙前的clip
-			if(_mapModel.mc_wallfrontEff.numChildren>0){
-				MapAnimClip.create(_mapModel.mc_wallfrontEff,sprite);
+			if(_mc_wallfrontEff.numChildren>0){
+				MapAnimClip.create(_mc_wallfrontEff,sprite);
 			}
 		}
 		
 		private function createUnityB2Loader():void{
-			var editorLoader:UnityB2Loader=UnityB2Loader.create(_mapModel.assetDatabaseXml,_mapModel.sceneXml);
+			var editorLoader:UnityB2Loader=UnityB2Loader.create(_assetDatabaseXml,_sceneXml);
 			_unityB2Loader=editorLoader;
 			GameObject.dontDestroyOnDestroyAll(_unityB2Loader);
 		}
@@ -190,13 +224,13 @@
 			}
 		}
 		
-		public function get width():int{return _mapModel.width;}
-		public function get height():int{return _mapModel.height;}
+		public function get width():int{return _width;}
+		public function get height():int{return _height;}
 		public function get camera():MapCamera{ return _camera; }
 		public function get unityB2Loader():UnityB2Loader{ return _unityB2Loader; }
 		public function get box2dMan():Box2dManager{ return _box2dMan; }
-		public function get viewportW():Number{ return _mapModel.viewportW; }
-		public function get viewportH():Number{ return _mapModel.viewportH; }
+		public function get viewportW():Number{ return _viewportW; }
+		public function get viewportH():Number{ return _viewportH; }
 		
 		override protected function onDestroy():void{
 			if(_mask){
@@ -216,10 +250,13 @@
 				GameObject.destroy(_camera);
 				_camera=null;
 			}
-			if(_mapModel){
-				_mapModel.dispose();
-				_mapModel=null;
-			}
+			_sceneXml=null;
+			_assetDatabaseXml=null;
+			_mc_wallfrontEff=null;
+			_mc_wall=null;
+			_mc_wallBehindEff=null;
+			_mc_bgMiddle=null;
+			_mc_bgBottom=null;
 			super.onDestroy();
 		}
 		
