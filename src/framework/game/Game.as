@@ -108,6 +108,7 @@
 			destroyAll();
 			if(_main)_main.removeEventListener("enterFrame",update);
 			if(_global){
+				_global.objectPool.clear(true);//清空对象池
 				GameObject.destroy(_global);
 				_global=null;
 			}
