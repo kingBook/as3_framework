@@ -48,18 +48,12 @@
 			return obj;
 		}
 		
-		/**根据游戏对象类返回游戏对象列表Vector.<GameObject>,当destroy一个这个类型的GameObject会影响列表的长度
-		 * 转换类型如: var players:Vector.< Player > = Vector.< Player >(getGameObjList(Player));
+		/**
+		 * 根据游戏对象类返回游戏对象数组,当destroy一个这个类型的GameObject会影响数组的长度
 		 */
-		public function getGameObjList(gameObjClass:Class):Vector.<GameObject>{ 
+		public function getGameObjList(gameObjClass:Class):Array{ 
 			var qualifiedClassName:String=getQualifiedClassName(gameObjClass);
 			return _gameObjectListProxy.getGameObjectList(qualifiedClassName); 
-		}
-		
-		/**根据游戏对象类返回游戏对象列表Array,当destroy()一个这个类型的GameObject会影响列表的长度*/
-		public function getGameObjListToArray(gameObjClass:Class):Array{
-			var qualifiedClassName:String=getQualifiedClassName(gameObjClass);
-			return _gameObjectListProxy.getGameObjectListToArray(qualifiedClassName);
 		}
 		
 		frameworkInternal function addUpdate(updateType:int,func:Function):void{

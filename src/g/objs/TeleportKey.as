@@ -43,7 +43,7 @@ package g.objs{
 		private function createMapComplete(e:MyEvent):void{
 			e.target.removeEventListener(MyEvent.CREATE_MAP_COMPLETE,createMapComplete);
 			
-			var tps:Vector.<GameObject>=_game.getGameObjList(Teleport);
+			var tps:Array=_game.getGameObjList(Teleport);
 			var i:int=tps.length;
 			while (--i>=0){
 				var tp:Teleport=tps[i] as Teleport;

@@ -61,7 +61,7 @@
 		override protected function handlingLinkObjects():void{
 			//当松开这个按钮开关时，如果还有另一个按钮开关处于按下状态，不操作控制的对象
 			if(_isOpen){
-				var switcherBtns:Vector.<GameObject>=_game.getGameObjList(SwitcherButton);
+				var switcherBtns:Array=_game.getGameObjList(SwitcherButton);
 				var i:int=switcherBtns.length;
 				var sbtn:SwitcherButton;
 				while(--i>=0){
@@ -71,7 +71,7 @@
 				}
 			}
 			//
-			var ctrlObjs:Vector.<GameObject>=_game.getGameObjList(SwitcherCtrlObj);
+			var ctrlObjs:Array=_game.getGameObjList(SwitcherCtrlObj);
 			i=ctrlObjs.length;
 			var ctrlObj:SwitcherCtrlObj;
 			while(--i>=0){

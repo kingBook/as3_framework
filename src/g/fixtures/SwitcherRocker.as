@@ -56,7 +56,7 @@ package g.fixtures{
 		}
 		
 		override protected function handlingLinkObjects():void{
-			var ctrlObjs:Vector.<GameObject>=_game.getGameObjList(SwitcherCtrlObj);
+			var ctrlObjs:Array=_game.getGameObjList(SwitcherCtrlObj);
 			var i:int=ctrlObjs.length;
 			var ctrlObj:SwitcherCtrlObj;
 			while (--i>=0){
