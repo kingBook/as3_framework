@@ -6,7 +6,7 @@
 	import flash.display.Sprite;
 	import flash.geom.Matrix;
 	import flash.geom.Rectangle;
-	import g.objs.AlphaTo;
+	import framework.objs.AlphaTo;
 	//import framework.utils.TweenMax;
 	/**
 	 * ...
@@ -60,13 +60,13 @@
 			
 			var time:Number=0.3;
 			
-			AlphaTo.create(bmp1,1,0.2,time,null,null,function ():void{
+			AlphaTo.create(bmp1,1,0.2,time,function ():void{
 				bmp1.bitmapData.dispose();
 				if(bmp1.parent)bmp1.parent.removeChild(bmp1);
 				if(sp1.parent)sp1.parent.removeChild(sp1);
 			});
 			
-			AlphaTo.create(bmp2,0.2,1,time,null,null,function ():void{
+			AlphaTo.create(bmp2,0.2,1,time,function ():void{
 				bmp2.bitmapData.dispose();
 				if(bmp2.parent)bmp2.parent.removeChild(bmp2);
 				if(sp2.parent)sp2.parent.removeChild(sp2);

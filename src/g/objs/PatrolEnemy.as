@@ -8,7 +8,6 @@
 	import framework.game.UpdateType;
 	import framework.events.FrameworkEvent;
 	import framework.utils.RandomKb;
-	import g.map.MapModel;
 	import g.MyData;
 	import g.objs.PatrolEnemy;
 	import framework.game.Game;

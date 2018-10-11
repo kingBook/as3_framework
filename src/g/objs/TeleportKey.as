@@ -3,6 +3,7 @@ package g.objs{
 	import flash.display.MovieClip;
 	import framework.game.Game;
 	import framework.objs.GameObject;
+	import framework.objs.MoveTo;
 	import framework.utils.Box2dUtil;
 	import framework.utils.LibUtil;
 	import g.objs.MovableObject;
@@ -58,7 +59,7 @@ package g.objs{
 		public function openTp():void{
 			if(_isOpenTping)return;
 			_isOpenTping=true;
-			MoveTo.create2(_body,_teleport.x/MyData.ptm_ratio,_teleport.y/MyData.ptm_ratio,1,openComplete);
+			MoveTo.create(_body,_teleport.x/MyData.ptm_ratio,_teleport.y/MyData.ptm_ratio,1,openComplete);
 		}
 		
 		private function openComplete():void{

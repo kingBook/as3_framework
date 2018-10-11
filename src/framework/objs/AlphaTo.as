@@ -1,4 +1,4 @@
-﻿package g.objs{
+﻿package framework.objs{
 	import fl.transitions.Tween;
 	import fl.transitions.TweenEvent;
 	import fl.transitions.easing.None;
@@ -6,20 +6,21 @@
 	import framework.game.Game;
 	import framework.objs.GameObject;
 	
-	public class AlphaTo extends GameObject{
+	public class AlphaTo extends ActionToObj{
 		
 		public static function create(target:*,alphaInit:Number=1,alphaTarget:Number=0,duration:Number=1,
-		updateFunc:Function=null,updateParams:Array=null,completeFunc:Function=null,completeParams:Array=null):AlphaTo{
+		onComplete:Function=null,onCompleteParams:Array=null,
+		onUpdate:Function=null,onUpdateParams:Array=null):AlphaTo{
 			var game:Game=Game.getInstance();
 			var info:*={};
 			info.target=target;
 			info.alphaInit=alphaInit;
 			info.alphaTarget=alphaTarget;
 			info.duration=duration;
-			info.updateFunc=updateFunc;
-			info.updateParams=updateParams;
-			info.completeFunc=completeFunc;
-			info.completeParams=completeParams;
+			info.onComplete=onComplete;
+			info.onCompleteParams=onCompleteParams;
+            info.onUpdate=onUpdate;
+            info.onUpdateParams=onUpdateParams;
 			return game.createGameObj(new AlphaTo(),info) as AlphaTo;
 		}
 		
@@ -43,10 +44,10 @@
 			_alphaInit=info.alphaInit;
 			_alphaTarget=info.alphaTarget;
 			_duration=info.duration;
-			_updateFunc=info.updateFunc;
-			_updateParams=info.updateParams;
-			_completeFunc=info.completeFunc;
-			_completeParams=info.completeParams;
+			_updateFunc=info.onUpdate;
+			_updateParams=info.onUpdateParams;
+			_completeFunc=info.onComplete;
+			_completeParams=info.onCompleteParams;
 			
 			_target.alpha=_alphaInit;
 			

@@ -1,4 +1,4 @@
-package g.objs{
+package framework.objs{
 	import Box2D.Common.Math.b2Vec2;
 	import Box2D.Dynamics.b2Body;
 	import fl.transitions.Tween;
@@ -8,26 +8,14 @@ package g.objs{
 	import framework.events.FrameworkEvent;
 	import framework.game.Game;
 	import framework.objs.GameObject;
-	public class MoveTo extends GameObject{
+	public class MoveTo extends ActionToObj{
 		
-		public static function create1(target:*,targetX:Number,targetY:Number,duration:Number,onComplete:Function=null,onCompleteParams:Array=null,onUpdate:Function=null,onUpdateParams:Array=null):MoveTo{
+		public static function create(target:*,targetX:Number,targetY:Number,duration:Number,
+		onComplete:Function=null,onCompleteParams:Array=null,
+		onUpdate:Function=null,onUpdateParams:Array=null):MoveTo{
 			var game:Game=Game.getInstance();
 			var info:*={};
 			info.target=target;
-			info.targetX=targetX;
-			info.targetY=targetY;
-			info.duration=duration;
-			info.onComplete=onComplete;
-			info.onCompleteParams=onCompleteParams;
-            info.onUpdate=onUpdate;
-            info.onUpdateParams=onUpdateParams;
-			return game.createGameObj(new MoveTo(),info) as MoveTo;
-		}
-		
-		public static function create2(body:b2Body,targetX:Number,targetY:Number,duration:Number,onComplete:Function=null,onCompleteParams:Array=null,onUpdate:Function=null,onUpdateParams:Array=null):MoveTo{
-			var game:Game=Game.getInstance();
-			var info:*={};
-			info.target=body;
 			info.targetX=targetX;
 			info.targetY=targetY;
 			info.duration=duration;

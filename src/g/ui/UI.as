@@ -17,7 +17,7 @@
 	import framework.utils.LibUtil;
 	import framework.system.KeyboardManager;
 	import framework.utils.ButtonEffect;
-	import g.objs.MoveTo;
+	import framework.objs.MoveTo;
 	public class UI extends MyObj{
 		
 		public static const TITLE:String="title";
@@ -223,7 +223,7 @@
 		private function addAnimtion():void{
 			_view.visible=true;
 			_view.y-=200;
-			_moveTo=MoveTo.create1(_view,0,0,0.7);
+			_moveTo=MoveTo.create(_view,0,0,0.7);
 		}
 		
 		private function isEndUI():Boolean{

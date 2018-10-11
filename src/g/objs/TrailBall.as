@@ -53,9 +53,9 @@ import flash.display.Sprite;
 import framework.game.Game;
 import framework.objs.GameObject;
 
-import g.objs.AlphaTo;
+import framework.objs.AlphaTo;
 import g.objs.DisplayObj;
-import g.objs.ScaleTo;
+import framework.objs.ScaleTo;
 import framework.objs.Clip;
 
 class BallView extends DisplayObj{

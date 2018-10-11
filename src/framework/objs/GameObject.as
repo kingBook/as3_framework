@@ -28,7 +28,10 @@
 		protected var _game:Game;
 		frameworkInternal var isIgnoreDestroyAll:Boolean=false;
 		private var _gameObjectListProxy:GameObjectListProxy;
-		private var _components:Vector.<Component>=new Vector.<Component>();;
+		private var _components:Vector.<Component>=new Vector.<Component>();
+		private var _alphaToList:Vector.<AlphaTo>;
+		private var _moveToList:Vector.<MoveTo>;
+		private var _scaleToList:Vector.<ScaleTo>;
 		
 		public function GameObject(){
 			super();
@@ -51,6 +54,70 @@
 		
 		virtual frameworkInternal function initPre_internal(info:*=null):void{}
 		virtual protected function init(info:*=null):void{}
+		
+		/**
+		 * 指定的时间内移动目标到指定的位置
+		 * @param	target 目标对象(拥有"x"和"y"属性的对象)
+		 * @param	targetX 目标x
+		 * @param	targetY 目标y
+		 * @param	duration 时间
+		 * @param	onComplete 完成时回调
+		 * @param	onCompleteParams 完成时回调参数
+		 * @param	onUpdate 移动过程中回调
+		 * @param	onUpdateParams 移动过程中回调参数
+		 * @return 返回一个新的MoveTo对象
+		 */
+		final protected function moveTo(target:*,targetX:Number,targetY:Number,duration:Number,
+		onComplete:Function=null,onCompleteParams:Array=null,
+		onUpdate:Function=null,onUpdateParams:Array=null):MoveTo{
+			var mto:MoveTo=MoveTo.create(target,targetX,targetY,duration,onComplete,onCompleteParams,onUpdate,onUpdateParams);
+			_moveToList||=new Vector.<MoveTo>();
+			_moveToList.push(mto);
+			mto.setPoolList(_moveToList);
+			return mto;
+		}
+		/**
+		 * 指定的时间内缩放目标到指定的大小
+		 * @param	target 目标对象(拥有"scaleX"和"scaleY"属性的对象)
+		 * @param	scaleInit 初始值
+		 * @param	scaleTarget 目标值
+		 * @param	duration 时间
+		 * @param	onComplete 完成时回调
+		 * @param	onCompleteParams 完成时回调参数
+		 * @param	onUpdate 移动过程中回调
+		 * @param	onUpdateParams 移动过程中回调参数
+		 * @return 返回一个新的ScaleTo对象
+		 */
+		final protected function scaleTo(target:*,scaleInit:Number=1,scaleTarget:Number=0,duration:Number=1,
+		onComplete:Function=null,onCompleteParams:Array=null,
+		onUpdate:Function=null,onUpdateParams:Array=null):ScaleTo{
+			var sto:ScaleTo=ScaleTo.create(target,scaleInit,scaleTarget,duration,onComplete,onCompleteParams,onUpdate,onUpdateParams);
+			_scaleToList||=new Vector.<ScaleTo>();
+			_scaleToList.push(sto);
+			sto.setPoolList(_scaleToList);
+			return sto;
+		}
+		/**
+		 * 指定的时间内改变目标的alpha到指定的大小
+		 * @param	target 目标对象(拥有"alpha"属性的对象)
+		 * @param	alphaInit 初始值
+		 * @param	alphaTarget 目标值
+		 * @param	duration 时间
+		 * @param	onComplete 完成时回调
+		 * @param	onCompleteParams 完成时回调参数
+		 * @param	onUpdate 移动过程中回调
+		 * @param	onUpdateParams 移动过程中回调参数
+		 * @return 返回一个新的AlphaTo对象
+		 */
+		final protected function alphaTo(target:*,alphaInit:Number=1,alphaTarget:Number=0,duration:Number=1,
+		onComplete:Function=null,onCompleteParams:Array=null,
+		onUpdate:Function=null,onUpdateParams:Array=null):AlphaTo{
+			var ato:AlphaTo=AlphaTo.create(target,alphaInit,alphaTarget,duration,onComplete,onCompleteParams,onUpdate,onUpdateParams);
+			_alphaToList=new Vector.<AlphaTo>();
+			_alphaToList.push(ato);
+			ato.setPoolList(_alphaToList);
+			return ato;
+		}
 		
 		/**添加组件*/
 		final public function addComponent(componentClass:Class,info:*=null):Component{
@@ -298,8 +365,25 @@
 				removeFromGameObjectList(_gameObjectListProxy);
 				_gameObjectListProxy = null;
 			}
+			
+			var i:int;
+			if(_moveToList){
+				i=_moveToList.length;
+				while(--i>=0) destroy(_moveToList[i]);
+				_moveToList=null;
+			}
+			if(_scaleToList){
+				i=_scaleToList.length;
+				while(--i>=0) destroy(_scaleToList[i]);
+				_scaleToList=null;
+			}
+			if(_alphaToList){
+				i=_alphaToList.length;
+				while(--i>=0) destroy(_alphaToList[i]);
+				_alphaToList=null;
+			}
 			if(_components){
-				var i:int=_components.length;
+				i=_components.length;
 				while (--i>=0){
 					if(_components[i]!=null)_components[i].destroy_internal();
 				}

@@ -1,14 +1,13 @@
-package g.objs{
+package framework.objs{
 	import fl.transitions.Tween;
 	import fl.transitions.TweenEvent;
 	import fl.transitions.easing.None;
 	import framework.events.FrameworkEvent;
     import framework.objs.GameObject;
     import framework.game.Game;
-    import g.objs.ScaleTo;
     import g.MyData;
 
-    public class ScaleTo extends GameObject{
+    public class ScaleTo extends ActionToObj{
         private var _v:Number;
 		private var _target:*;
 		private var _scaleInit:Number;
@@ -25,17 +24,18 @@ package g.objs{
             super();
         }
         public static function create(target:*,scaleInit:Number=1,scaleTarget:Number=0,duration:Number=1,
-		updateFunc:Function=null,updateParams:Array=null,completeFunc:Function=null,completeParams:Array=null):ScaleTo{
+		onComplete:Function=null,onCompleteParams:Array=null,
+		onUpdate:Function=null,onUpdateParams:Array=null):ScaleTo{
 			var game:Game=Game.getInstance();
 			var info:*={};
 			info.target=target;
 			info.scaleInit=scaleInit;
 			info.scaleTarget=scaleTarget;
 			info.duration=duration;
-			info.updateFunc=updateFunc;
-			info.updateParams=updateParams;
-			info.completeFunc=completeFunc;
-			info.completeParams=completeParams;
+			info.onComplete=onComplete;
+			info.onCompleteParams=onCompleteParams;
+            info.onUpdate=onUpdate;
+            info.onUpdateParams=onUpdateParams;
 			return game.createGameObj(new ScaleTo(),info) as ScaleTo;
 		}
         override protected function init(info:* = null):void{
@@ -44,10 +44,10 @@ package g.objs{
 			_scaleInit=info.scaleInit;
 			_scaleTarget=info.scaleTarget;
 			_duration=info.duration;
-			_updateFunc=info.updateFunc;
-			_updateParams=info.updateParams;
-			_completeFunc=info.completeFunc;
-			_completeParams=info.completeParams;
+			_updateFunc=info.onUpdate;
+			_updateParams=info.onUpdateParams;
+			_completeFunc=info.onComplete;
+			_completeParams=info.onCompleteParams;
 			
 			_v=(_scaleTarget-_scaleInit)/(_duration*MyData.frameRate);
 			_target.scaleX=_target.scaleY=_scaleInit;
