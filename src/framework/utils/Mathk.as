@@ -306,8 +306,10 @@
 			return {x:a.x + dx, y:a.y + dy};
 		}
 		
-		public static const Deg2Rad:Number=0.0174532925;/*Math.PI/180*/
-		public static const Rad2Deg:Number=57.2957795130;/*180/Math.PI*/
+		/**Math.PI/180*/
+		public static const Deg2Rad:Number=0.0174532925;
+		/**180/Math.PI*/
+		public static const Rad2Deg:Number=57.2957795130;
 		
 	};
 

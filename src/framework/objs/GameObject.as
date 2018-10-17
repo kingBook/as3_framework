@@ -1,6 +1,7 @@
 ﻿package framework.objs{
 	import flash.display.DisplayObjectContainer;
 	import flash.display.MovieClip;
+	import flash.utils.Dictionary;
 	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
 	import flash.utils.getQualifiedSuperclassName;
@@ -32,6 +33,7 @@
 		private var _alphaToList:Vector.<AlphaTo>;
 		private var _moveToList:Vector.<MoveTo>;
 		private var _scaleToList:Vector.<ScaleTo>;
+		private var _nextFixedUpdateDict:Dictionary;
 		
 		public function GameObject(){
 			super();
@@ -228,6 +230,14 @@
 			_game.scheduleOnce(func,delay,params);
 		}
 		
+		/**在下次fixedUpdate时，调度一次函数*/
+		final protected function scheduleOnceNextFixed(func:Function,funcParams:Array=null):void{
+			_nextFixedUpdateDict||=new Dictionary();
+			if(!_nextFixedUpdateDict[func]){
+				_nextFixedUpdateDict[func]={func:func,funcParams:funcParams};
+			}
+		}
+		
 		/**移除函数调度*/
 		final protected function unschedule(func:Function):void{
 			_game.unschedule(func);
@@ -250,7 +260,17 @@
 		}
 		private function fixedUpdate_private():void{
 			foreachComponetsCallUpdate(UpdateType.FIXED);
-			fixedUpdate();
+			//
+			for(var k:* in _nextFixedUpdateDict){
+				var obj:*=_nextFixedUpdateDict[k];
+				obj.func.apply(null,obj.funcParams);
+			}
+			_nextFixedUpdateDict=null;
+			//
+			if(!_isDestroyed){
+				fixedUpdate();
+			}
+			
 		}
 		private function update_private():void{
 			foreachComponetsCallUpdate(UpdateType.UPDATE);
@@ -360,6 +380,8 @@
 			unscheduleUpdate(UpdateType.UPDATE);
 			unscheduleUpdate(UpdateType.LATE);
 			_game.removeEventListener(FrameworkEvent.DESTROY_ALL,destroyAll_self);
+			
+			_nextFixedUpdateDict=null;
 			
 			if(_gameObjectListProxy){
 				removeFromGameObjectList(_gameObjectListProxy);
