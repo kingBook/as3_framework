@@ -18,7 +18,6 @@
 		public static var mute:Boolean = true;
         public static var isEndContinueBackgroupMusic:Boolean=false;//胜利/失败时是否继续播放背景音乐
 		public static var isDisableControllBar:Boolean=false;
-		public static var isLoadLevelXML:Boolean=false;
 		public static var linkHomePageFunc:Function = null;
 		
 		public static var isAIR:Boolean=false;

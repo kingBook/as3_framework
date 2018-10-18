@@ -48,7 +48,7 @@
 		}
 		
 		override protected function init(info:* = null):void{
-			initData();
+			initData(info);
 			//创建相机
 			createCamera();
 			//创建背景
@@ -67,10 +67,10 @@
 			if(!MyData.isAIR) createMask();
 		}
 		
-		private function initData():void{
+		protected function initData(info:*):void{
 			var gameLevel:int=_myGame.myGlobal.gameLevel;
 			_sceneXml=MapData.getLevelXml(gameLevel);
-			_assetDatabaseXml=XML(Assets.getInstance().getFileWithName("assetDatabase.xml"));
+			_assetDatabaseXml=XML(Assets.getInstance().getEmbedFileWithName("assetDatabase"));
 			
 			var data:*=MapData.getDataObj(gameLevel);
 			_width=data.size.width;
@@ -107,10 +107,10 @@
 		
 		private function createBg():void{
 			var sprite:Sprite=_game.global.layerMan.items0Layer;
-			if(_mc_bgBottom.numChildren>0){
+			if(_mc_bgBottom&&_mc_bgBottom.numChildren>0){
 				var mapBg0:MapBg=MapBg.create(_mc_bgBottom,sprite,_camera,0.5,true);
 			}
-			if(_mc_bgMiddle.numChildren>0){
+			if(_mc_bgMiddle&&_mc_bgMiddle.numChildren>0){
 				var mapBg1:MapBg=MapBg.create(_mc_bgMiddle,sprite,_camera,0.2,true);
 			}
 			//创建云朵
@@ -148,15 +148,15 @@
 		private function createWall(body:b2Body):void{
 			var sprite:Sprite=_game.global.layerMan.items2Layer;
 			//创建墙后的clip
-			if(_mc_wallBehindEff.numChildren>0){
+			if(_mc_wallBehindEff&&_mc_wallBehindEff.numChildren>0){
 				MapAnimClip.create(_mc_wallBehindEff,sprite);
 			}
 			//创建墙
-			if(_mc_wall.numChildren>0){
+			if(_mc_wall&&_mc_wall.numChildren>0){
 				MapWall.create(_mc_wall,sprite,body);
 			}
 			//创建墙前的clip
-			if(_mc_wallfrontEff.numChildren>0){
+			if(_mc_wallfrontEff&&_mc_wallfrontEff.numChildren>0){
 				MapAnimClip.create(_mc_wallfrontEff,sprite);
 			}
 		}

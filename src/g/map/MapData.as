@@ -11,7 +11,7 @@ package g.map{
 			_datas=[];
 			var i:int, len:int=_levelOrderList.length;
 			
-			var levelConfig:XML=XML(Assets.getInstance().getFileWithName("levelConfig.xml"));
+			var levelConfig:XML=XML(Assets.getInstance().getEmbedFileWithName("levelConfig"));
 			var sizeList:XMLList=levelConfig.Size;
 			
 			var data:*={};
@@ -37,12 +37,12 @@ package g.map{
 		
 		public static function getLevelXml(gameLevel:int):XML{
 			var dataLevel:int=getDataLevel(gameLevel);
-			return XML(Assets.getInstance().getFileWithName("level_"+dataLevel+".xml"));
+			return XML(Assets.getInstance().getEmbedFileWithName("level_"+dataLevel));
 		}
 		
 		public static function getTmx(gameLevel:int):XML{
 			var dataLevel:int=getDataLevel(gameLevel);
-			return XML(Assets.getInstance().getFileWithName("level_"+dataLevel+".tmx"));
+			return XML(Assets.getInstance().getEmbedFileWithName("level_"+dataLevel));
 		}
 		
 		/**程序中需要在某特定关卡执行操作时，使用该函数返回特定关卡数，避免交换关卡时产生错误*/

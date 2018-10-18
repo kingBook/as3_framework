@@ -25,7 +25,7 @@ package g{
 		private function removeFromStage(e:Event):void{
 			removeEventListener(Event.REMOVED_FROM_STAGE,removeFromStage);
 			MyGame.destroy();
-			Assets.destroyInstance();
+			Assets.destroy();
 			_main=null;
 		}
 		

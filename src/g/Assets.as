@@ -1,10 +1,8 @@
 ﻿package g{
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
-	import flash.utils.setTimeout;
-	import g.MyData;
-	import g.AssetsLoader;
 	import flash.utils.Dictionary;
+	import flash.utils.setTimeout;
 	import g.map.MapData;
 	
 	public dynamic class Assets extends EventDispatcher{
@@ -67,61 +65,24 @@
 		/*[Embed(source="../../bin/assets/level_1.tmx", mimeType="application/octet-stream")]
 		private const level_1:Class;*/
 		
-		private var _assetsLoader:AssetsLoader;
-		private var _files:Dictionary;
 
 		public function init():void{
 			new SwcClassConfig();
-			if(MyData.isLoadLevelXML){
-				loadFiles();
-			}else{
-				setTimeout(loaded,1);
-			}
-		}
-		private function loadFiles():void{
-			//initialize urls
-			var urls:Array=[];
-			urls.push('./bin/assets/assetDatabase.xml');
-			urls.push('./bin/assets/levelConfig.xml');
-			for(var i:int=1;i<=MapData.maxLevel;i++){
-				urls.push('./bin/assets/level_'+i+'.xml');
-			}
-			//load urls
-			_assetsLoader=new AssetsLoader();
-			_assetsLoader.init();
-			_assetsLoader.loadUrls(Vector.<String>(urls),loaded);
+			setTimeout(loaded,1);
 		}
 		
 		private function loaded(e:Event=null):void{
 			e && e.target.removeEventListener(Event.COMPLETE, loaded);
 			//
-			_files=new Dictionary();
-			var assetDatabaseFileName:String="assetDatabase";
-			var levelConfigFileName:String="levelConfig";
-			var fileName:String;
-			var i:int;
-			if(MyData.isLoadLevelXML){
-				_files[assetDatabaseFileName+".xml"]=XML(_assetsLoader.getFileWithName(assetDatabaseFileName+".xml"));
-				_files[levelConfigFileName+".xml"]=XML(_assetsLoader.getFileWithName(levelConfigFileName+".xml"));
-				for(i=1;i<=MapData.maxLevel;i++){
-					fileName="level_"+i+".xml";
-					_files[fileName]=XML(_assetsLoader.getFileWithName(fileName));
-				}
-			}else{
-				_files[assetDatabaseFileName+".xml"]=XML(getEmbedFileWithName(assetDatabaseFileName));
-				_files[levelConfigFileName+".xml"]=XML(getEmbedFileWithName(levelConfigFileName));
-				for(i=1;i<=MapData.maxLevel;i++){
-					fileName="level_"+i+".xml";
-					_files[fileName]=XML(getEmbedFileWithName("level_"+i));
-				}
-			}
 			dispatchEvent(new Event(Event.COMPLETE));
 		}
-
-		public function getFileWithName(fileName:String):*{
-			return _files[fileName];
-		}
-		private function getEmbedFileWithName(name:String):*{
+		
+		/**
+		 * 返回指定名称的嵌入文件
+		 * @param	name 嵌入代码下一行的Class成员名称
+		 * @return 
+		 */
+		public function getEmbedFileWithName(name:String):*{
 			var _C:Class=this[name];
 			if(_C){
 				return new _C();
@@ -131,21 +92,16 @@
 			return null;
 		}
 
-		private function release():void{
-			if(_assetsLoader){
-				_assetsLoader.release();
-				_assetsLoader=null;
-			}
-			for(var key:* in _files)delete _files[key];
-			_files=null;
+		private function onDestroy():void{
+			//
 		}
 		
 		private static var _instance:Assets;
 		public static function getInstance():Assets{
 			return _instance||=new Assets();
 		}
-		public static function destroyInstance():void{
-			if(_instance)_instance.release();
+		public static function destroy():void{
+			if(_instance)_instance.onDestroy();
 			_instance=null;
 		}
 		
