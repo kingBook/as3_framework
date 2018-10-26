@@ -54,7 +54,8 @@
 				_printStr+=rest[i]+(i<rest.length-1?" ":"");
 			}
 			_printTxt.text=_printStr;
-			trace(_printStr);
+			_printTxt.parent.addChild(_printTxt);
+			trace(rest);
 		}
 		
 	};

@@ -27,8 +27,6 @@
 		protected var _assetDatabaseXml:XML;
 		protected var _width:Number;
 		protected var _height:Number;
-		protected var _viewportW:Number;
-		protected var _viewportH:Number;
 		protected var _mc_wallfrontEff:MovieClip;
 		protected var _mc_wall:MovieClip;
 		protected var _mc_wallBehindEff:MovieClip;
@@ -76,16 +74,6 @@
 			_width=data.size.width;
 			_height=data.size.height;
 			
-			var tmpW:int,tmpH:int;
-			if(MyData.isAIR){
-				tmpW=_game.global.stage.stageWidth;
-				tmpH=_game.global.stage.stageHeight;
-			}else{
-				tmpW=MyData.designW;
-				tmpH=MyData.designH;
-			}
-			_viewportW=Math.min(width,tmpW);
-			_viewportH=Math.min(height,tmpH);
 			
 			_mc_wallfrontEff=LibUtil.getDefMovie(data.wallFrontEff.name);
 			_mc_wallfrontEff.gotoAndStop(data.wallFrontEff.frame);
@@ -100,7 +88,9 @@
 		}
 		
 		private function createCamera():void{
-			var cameraSize:Point=new Point(_viewportW,_viewportH);
+			var stageW:Number=_game.global.stage.stageWidth;
+			var stageH:Number=_game.global.stage.stageHeight;
+			var cameraSize:Point=new Point(stageW,stageH);
 			var cameraTarget:DisplayObject=_game.global.layerMan.gameLayer;
 			_camera=MapCamera.create(cameraSize,_width,_height,cameraTarget);
 		}
@@ -229,8 +219,6 @@
 		public function get camera():MapCamera{ return _camera; }
 		public function get unityB2Loader():UnityB2Loader{ return _unityB2Loader; }
 		public function get box2dMan():Box2dManager{ return _box2dMan; }
-		public function get viewportW():Number{ return _viewportW; }
-		public function get viewportH():Number{ return _viewportH; }
 		
 		override protected function onDestroy():void{
 			if(_mask){

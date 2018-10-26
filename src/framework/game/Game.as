@@ -42,7 +42,16 @@
 			_intervalProxy=new IntervalProxy(this);
 		}
 		
-		/**创建游戏对象*/
+		/**
+		 * 创建游戏对象
+		 * 例：
+		 * var game:Game=Game.getInstance();
+		 * var info:*={name:"p1"};
+		 * game.createGameObj(new Player(),info);
+		 * @param	obj GameObject子类的实例,如: new Player()
+		 * @param	info 传递给GameObject子类init(info:*=null)函数的info
+		 * @return
+		 */
 		public function createGameObj(obj:GameObject, info:*=null):GameObject{
 			obj.init_internal(this,_gameObjectListProxy,info);
 			return obj;
