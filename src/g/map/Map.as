@@ -14,6 +14,7 @@
 	import framework.utils.LibUtil;
 	import g.Assets;
 	import g.MyData;
+	import g.objs.FitGameLayer;
 	import g.objs.MapAnimClip;
 	import g.objs.MapBg;
 	import g.objs.MapWall;
@@ -37,6 +38,8 @@
 		protected var _unityB2Loader:UnityB2Loader;
 		protected var _box2dMan:Box2dManager;
 		protected var _mask:DisplayObject;
+		
+		protected var _fitGameLayer:FitGameLayer;
 				
 		public function Map(){super();}
 		
@@ -47,6 +50,8 @@
 		
 		override protected function init(info:* = null):void{
 			initData(info);
+			//
+			_fitGameLayer=FitGameLayer.create();
 			//创建相机
 			createCamera();
 			//创建背景
@@ -217,6 +222,10 @@
 		public function get box2dMan():Box2dManager{ return _box2dMan; }
 		
 		override protected function onDestroy():void{
+			if(_fitGameLayer){
+				destroy(_fitGameLayer);
+				_fitGameLayer=null;
+			}
 			if(_mask){
 				_game.global.layerMan.shakeLayer.mask=null;
 				if(_mask.parent)_mask.parent.removeChild(_mask);
