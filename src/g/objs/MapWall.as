@@ -1,12 +1,17 @@
 package g.objs{
+	import Box2D.Collision.Shapes.b2Shape;
+	import Box2D.Common.Math.b2Vec2;
 	import Box2D.Dynamics.b2Body;
+	import Box2D.Dynamics.b2Fixture;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import framework.game.Game;
 	import framework.utils.FuncUtil;
+	import g.MyData;
 	import g.map.MapCamera;
 	import g.events.MyEvent;
 	
@@ -16,7 +21,7 @@ package g.objs{
 		private var _sprite:Sprite;
 		private var _friction:Number;
 		private var _body:b2Body;
-		
+		private var _offset:Point;
 		
 		public function MapWall(){
 			super();
@@ -44,6 +49,7 @@ package g.objs{
 			var bmp:Bitmap=new Bitmap(_bmd,"auto",true);
 			bmp.x=rect.x;
 			bmp.y=rect.y;
+			_offset=new Point(bmp.x,bmp.y);
 			_sprite.addChild(bmp);
 		}
 		
@@ -54,6 +60,32 @@ package g.objs{
 			_bmd=null;
 			_body=null;
 			super.onDestroy();
+		}
+		
+		public function hitTestPoint(x:int,y:int):Boolean{
+			x-=_offset.x;
+			y-=_offset.y;
+			var pixel:uint=_bmd.getPixel32(x,y);
+			return pixel>0;
+		}
+		
+		/**
+		 * 检测某点与刚体碰撞
+		 * @param	x 像素单位
+		 * @param	y 像素单位
+		 * @return
+		 */
+		public function hitBodyPoint(x:Number,y:Number):Boolean{
+			var result:Boolean=false;
+			var p:b2Vec2=b2Vec2.MakeOnce(x/MyData.ptm_ratio,y/MyData.ptm_ratio);
+			for(var fixture:b2Fixture=_body.GetFixtureList();fixture;fixture=fixture.GetNext()){
+				var shape:b2Shape=fixture.GetShape();
+				if(shape.TestPoint(_body.GetTransform(),p)){
+					result=true;
+					break;
+				}
+			}
+			return result;
 		}
 		
 		public function get sprite():Sprite{

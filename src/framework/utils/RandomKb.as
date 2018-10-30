@@ -12,6 +12,11 @@
 			return boolean?1:-1;
 		}
 		
+		/**返回0到val开区间的随机浮点数*/
+		public static function randomFloat(val:Number):Number{
+			return Math.random()*val;
+		}
+		
 		/**返回0到val-1闭区间的随机整数*/
 		public static function randomInt(val:int):int{
 			return (Math.random()*val)|0;

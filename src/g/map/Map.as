@@ -74,7 +74,6 @@
 			_width=data.size.width;
 			_height=data.size.height;
 			
-			
 			_mc_wallfrontEff=LibUtil.getDefMovie(data.wallFrontEff.name);
 			_mc_wallfrontEff.gotoAndStop(data.wallFrontEff.frame);
 			_mc_wall=LibUtil.getDefMovie(data.wall.name);
@@ -88,11 +87,8 @@
 		}
 		
 		private function createCamera():void{
-			var stageW:Number=_game.global.stage.stageWidth;
-			var stageH:Number=_game.global.stage.stageHeight;
-			var cameraSize:Point=new Point(stageW,stageH);
 			var cameraTarget:DisplayObject=_game.global.layerMan.gameLayer;
-			_camera=MapCamera.create(cameraSize,_width,_height,cameraTarget);
+			_camera=MapCamera.create(_width,_height,cameraTarget);
 		}
 		
 		private function createBg():void{
@@ -124,8 +120,8 @@
 		
 		private function createMask():void{
 			var target:Sprite=_game.global.layerMan.shakeLayer;
-			var maskW:Number=camera.size.x;
-			var maskH:Number=camera.size.y;
+			var maskW:Number=_game.global.stage.stageWidth;
+			var maskH:Number=_game.global.stage.stageHeight;
 			var shape:Shape=new Shape();
 			shape.graphics.beginFill(0,1);
 			shape.graphics.drawRect(0,0,maskW,maskH);

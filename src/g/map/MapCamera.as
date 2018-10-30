@@ -6,6 +6,7 @@
 	import flash.utils.setInterval;
 	import flash.utils.clearInterval;
 	import framework.game.Game;
+	import framework.utils.FuncUtil;
 	import g.MyData;
 	import g.events.MyEvent;
 	import g.objs.MyObj;
@@ -25,7 +26,6 @@
 		private var _bindMode:uint=NONE;
 		private var _position:Point;
 		private var _targetPos:Point;
-		private var _size:Point;
 		private var _cameraTarget:DisplayObject;
 		private var _bindTargets:Array;
 		private var _bindTargetsCenter:Point;
@@ -48,7 +48,6 @@
 		
 		/**
 		 * 创建一个MapCamera
-		 * @param	size 一般情况下就是舞台的大小
 		 * @param	mapWidth 
 		 * @param	mapHeight 
 		 * @param	cameraTarget 要滚动的显示对象
@@ -56,10 +55,9 @@
 		 * @param	focusY 0.01~0.99
 		 * @return
 		 */
-		public static function create(size:Point,mapWidth:Number,mapHeight:Number,cameraTarget:DisplayObject,focusX:Number=0.5,focusY:Number=0.5):MapCamera{
+		public static function create(mapWidth:Number,mapHeight:Number,cameraTarget:DisplayObject,focusX:Number=0.5,focusY:Number=0.5):MapCamera{
 			var game:Game=Game.getInstance();
 			var info:*={};
-			info.size=size;
 			info.mapWidth=mapWidth;
 			info.mapHeight=mapHeight;
 			info.cameraTarget=cameraTarget;
@@ -70,11 +68,9 @@
 		
 		override protected function init(info:* = null):void{
 			super.init(info);
-			_size=info.size;
 			_cameraTarget=info.cameraTarget;
 			_cameraTargetInitPos=new Point(_cameraTarget.x,_cameraTarget.y);
 			_mapSize=new Point(info.mapWidth,info.mapHeight);
-			
 			setFocus(info.focusX,info.focusY);
 		}
 		
@@ -86,19 +82,25 @@
 		public function setFocus(x:Number=0.5,y:Number=0.5):void{
 			x=Math.min(Math.max(x,0.01),0.99);
 			y=Math.min(Math.max(y,0.01),0.99);
-			
 			_focus||=new Point();
 			_focus.setTo(x,y);
 			
+			var stageW:int=_game.global.stage.stageWidth;
+			var stageH:int=_game.global.stage.stageHeight;
+			
 			_min||=new Point();
-			_min.setTo(_size.x*_focus.x,_size.y*_focus.y);
+			_min.setTo(stageW*_focus.x,stageH*_focus.y);
+			_min=FuncUtil.localXY_2(_min,_cameraTarget);
+			_min.setTo(int(_min.x+0.9),int(_min.y+0.9));
+			
+			var fpt:Point=new Point(stageW*(1-_focus.x),stageH*(1-_focus.y));
+			fpt=FuncUtil.localXY_2(fpt,_cameraTarget);
 			_max||=new Point();
-			_max.setTo(_mapSize.x-_size.x*(1-_focus.x), _mapSize.y-_size.y*(1-_focus.y));
-			_max.x*=_game.global.main.scaleX;//添加主文档main的缩放量 edit 2018-03-05
-			_max.y*=_game.global.main.scaleY;//添加主文档main的缩放量 edit 2018-03-05
+			_max.setTo(_mapSize.x-fpt.x, _mapSize.y-fpt.y);
+			_max.setTo(int(_max.x),int(_max.y));
 			
 			_position||=new Point();
-			_position.setTo(int(_size.x*_focus.x),int(_size.y*_focus.y));
+			_position.setTo(_min.x,_min.y);
 		}
 		
 		/**绑定相机到一个位置上，位置可以每一帧改变, isRightNow:表示立即到这个位置不执行缓动*/
@@ -159,12 +161,15 @@
 			
 			vx=vx>=0?int(vx+0.9):int(vx-0.9);
 			vy=vy>=0?int(vy+0.9):int(vy-0.9);
+			
 			var x:int=int(_position.x)+vx;
 			var y:int=int(_position.y)+vy;
 			x=Math.min(Math.max(x,_min.x),_max.x);
 			y=Math.min(Math.max(y,_min.y),_max.y);
+			
 			vx=x-_position.x;
 			vy=y-_position.y;
+
 			if(vx!=0||vy!=0){
 				dispatchMoveEvent(int(vx),int(vy));
 				setPosition(x,y);
@@ -190,8 +195,9 @@
 			y=Math.min(Math.max(y,_min.y),_max.y);
 			_position.x=x;
 			_position.y=y;
-			_cameraTarget.x=-(_position.x-int(_size.x*_focus.x));
-			_cameraTarget.y=-(_position.y-int(_size.y*_focus.y));
+			
+			_cameraTarget.x=-(_position.x-_min.x/*int(_size.x*_focus.x)*/);
+			_cameraTarget.y=-(_position.y-_min.y/*int(_size.y*_focus.y)*/);
 		}
 		
 		/**返回多个目标的中心*/
@@ -251,14 +257,11 @@
 			_isAllowBackward=value;
 		}
 		
-		public function get size():Point{ return _size; }
-		
 		override protected function onDestroy():void{
 			stopCurShake();
 			_cameraTarget.x=_cameraTargetInitPos.x;
 			_cameraTarget.y=_cameraTargetInitPos.y;
 			_cameraTarget=null;
-			_size=null;
 			_position=null;
 			_targetPos=null;
 			_cameraTarget=null;

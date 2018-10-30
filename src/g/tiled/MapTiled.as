@@ -43,7 +43,7 @@ package g.tiled{
 			
 			var cameraSize:Point=new Point(MyData.designW,MyData.designH);
 			var cameraTarget:DisplayObject=_game.global.layerMan.gameLayer;
-			_camera=MapCamera.create(cameraSize,_width,_height,cameraTarget);
+			_camera=MapCamera.create(_width,_height,cameraTarget);
 		}
 		
 		/*override protected function createMapBodies():void{

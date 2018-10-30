@@ -55,12 +55,8 @@ package g.objs{
 			var vx:int=e.info.vx;
 			var vy:int=e.info.vy;
 			if(_isScorll){
-				vx*=_friction;
-				vy*=_friction;
-				vx=vx>0?int(vx-0.9):int(vx+0.9);
-				vy=vy>0?int(vy-0.9):int(vy+0.9);
-				_sprite.x+=vx;
-				_sprite.y+=vy;
+				_sprite.x+=vx*_friction;//vx*_friction为Number
+				_sprite.y+=vy*_friction;//vy*_friction为Number
 			}else{
 				_sprite.x+=vx;
 				_sprite.y+=vy;
