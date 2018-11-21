@@ -136,6 +136,29 @@
 			gotoLevel(myGlobal.gameLevel+1);
 		}
 		
+		/**创建切场过渡动画*/
+		public function createTransitionAnim(defName:String,atMaskAllFrame:int,destroyFunc:Function=null,newFunc:Function=null):MovieClip{
+			var mc:MovieClip=LibUtil.getDefMovie(defName,null,true);
+			mc.play();
+			mc.addFrameScript(atMaskAllFrame-1,function():void{
+				if(destroyFunc!=null)destroyFunc();
+			});
+			mc.addFrameScript(atMaskAllFrame,function():void{
+				if(newFunc!=null)newFunc();
+			});
+			mc.addFrameScript(mc.totalFrames-1,function():void{
+				mc.stop();
+				mc.addFrameScript(atMaskAllFrame-1,null);
+				mc.addFrameScript(atMaskAllFrame,null);
+				mc.addFrameScript(mc.totalFrames-1,null);
+				FuncUtil.removeChild(mc);
+			});
+			mc.scaleX=myGlobal.resizeMan.curWScale;
+			mc.scaleY=myGlobal.resizeMan.curHScale;
+			global.layerMan.uiLayer.addChild(mc);
+			return mc;
+		}
+		
 		private var _endLevelAnims:Vector.<MovieClip>=new Vector.<MovieClip>();
 		/**创建关卡结束弹界面之前的动画*/
 		private function createEndLevelAnim(mcDefName:String,onEndFrame:Function):void{

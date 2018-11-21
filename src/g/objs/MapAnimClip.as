@@ -5,10 +5,11 @@ package g.objs{
 	import flash.utils.getQualifiedClassName;
 	import framework.objs.Clip;
 	import framework.game.Game;
+	import framework.utils.FuncUtil;
 	
 	public class MapAnimClip extends DisplayObj{
 		
-		private var _sprite:Sprite;
+		private var _listObjs:Array;
 		
 		public function MapAnimClip(){
 			super();
@@ -25,40 +26,46 @@ package g.objs{
 		
 		override protected function init(info:* = null):void{
 			super.init(info);
-			_sprite=_view as Sprite;
-			transformChildsToClips(info.mc,_sprite);
+			_listObjs=transformChildsToClips(info.mc,Sprite(_view));
 			
 		}
 		
-		private function transformChildsToClips(container:MovieClip,parent:Sprite,outputList:Vector.<Clip>=null):Vector.<Clip>{
-			var list:Vector.<Clip>=outputList?outputList:new Vector.<Clip>();
-			var clip:Clip;
+		private function transformChildsToClips(container:MovieClip,parent:Sprite,outputList:Array=null):Array{
+			var list:Array=outputList?outputList:[];
+			var clip:*;
 			var len:int=container.numChildren;
 			var child:DisplayObject;
 			for(var i:int=0;i<len;i++){
 				child=container.getChildAt(i);
 				if(child is MovieClip){
-					var qName:String=getQualifiedClassName(child);
-					var isCustomLinkClass:Boolean=qName.indexOf("::MovieClip")<0;
-					if(isCustomLinkClass){
-						clip=Clip.fromDefName(qName,true);
-						clip.transform=child.transform;
-						clip.smoothing=true;
+					if(child.name.indexOf("ignore")>-1){//名称含有"ignore"不转换
+						clip=child;
 					}else{
-						clip=Clip.fromDisplayObject(child);
+						var qName:String=getQualifiedClassName(child);
+						var isCustomLinkClass:Boolean=qName.indexOf("::MovieClip")<0;
+						if(isCustomLinkClass){
+							clip=Clip.fromDefName(qName,true);
+							clip.transform=child.transform;
+							clip.smoothing=true;
+						}else{
+							clip=Clip.fromDisplayObject(child);
+						}
 					}
 				}else{
 					clip=Clip.fromDisplayObject(child);
 				}
 				clip.filters=child.filters;
 				list.push(clip);
-				parent.addChild(clip);
+			}
+			for(i=0;i<list.length;i++){
+				parent.addChild(list[i]);
 			}
 			return list;
 		}
 		
 		override protected function onDestroy():void{
-			_sprite=null;
+			FuncUtil.removeChildList(_listObjs);
+			_listObjs=null;
 			super.onDestroy();
 		}
 	};

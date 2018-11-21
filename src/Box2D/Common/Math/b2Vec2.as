@@ -47,7 +47,7 @@ public class b2Vec2
 	//----------start-----
 	//2015/9/21 10:01 kingBook
 	private static var _onceV:b2Vec2=new b2Vec2();
-	static public function MakeOnce(x_:Number, y_:Number):b2Vec2{
+	static public function MakeOnce(x_:Number=0, y_:Number=0):b2Vec2{
 		_onceV.x=x_;
 		_onceV.y=y_;
 		return _onceV;
