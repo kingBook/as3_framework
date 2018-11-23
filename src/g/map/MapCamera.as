@@ -261,15 +261,6 @@
 			_cameraTarget.parent.y=_shakeTargetInitPos.y;
 		}
 		
-		/**
-		 * 外部每帧调用这个函数实现相机逐渐远/近的视觉效果
-		 * @param	ratio (0~1)0:最近的效果 1:最远效果
-		 */
-		public function setDistance(ratio:Number):void{
-			ratio=ratio>1?1:ratio<0?0:ratio;
-			
-		}
-		
 		public function setAllowScorll(value:Boolean):void{
 			_isAllowScorll=value;
 		}

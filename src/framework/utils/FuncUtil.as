@@ -166,12 +166,16 @@
 			if (!disObj) throw new Error("FuncUtil::globalXY() 参数disObj不能为null");
 			if (!disObj.parent) throw new Error("FuncUtil::globalXY()传进的对象不在显示列表!");
 			
+			//记录localPt,避免localPt与out引用相同，导致错误
+			var localX:Number=localPt.x;
+			var localY:Number=localPt.y;
+			
 			if(!out)out=new Point(disObj.x,disObj.y);
 			else out.setTo(disObj.x,disObj.y);
 			
 			if(localPt){
-				out.x+=localPt.x;
-				out.y+=localPt.y;
+				out.x+=localX;
+				out.y+=localY;
 			}
 			var parentObj:DisplayObjectContainer=disObj.parent;
 			while(parentObj){
