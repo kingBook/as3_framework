@@ -1,6 +1,7 @@
 ﻿package g.map{
 	import Box2D.Dynamics.b2Body;
 	import flash.display.DisplayObject;
+	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.geom.Point;
 	import flash.utils.setInterval;
@@ -8,6 +9,7 @@
 	import framework.game.Game;
 	import framework.utils.FuncUtil;
 	import g.MyData;
+	import g.ResizeManager;
 	import g.events.MyEvent;
 	import g.objs.MyObj;
 	
@@ -24,7 +26,7 @@
 		private var _min:Point;
 		private var _max:Point;
 		private var _bindMode:uint=NONE;
-		private var _position:Point;
+		private var _position:Point;//以_cameraTarget作为坐标空间
 		private var _targetPos:Point;
 		private var _cameraTarget:DisplayObject;
 		private var _bindTargets:Array;
@@ -38,8 +40,11 @@
 		private var _curShakeId:uint;
 		private var _shakeTargetInitPos:Point=new Point();
 		private var _cameraTargetInitPos:Point;
+		private var _cameraTargetInitScale:Point;
 		private var _isAllowScorll:Boolean=true;
 		private var _isAllowBackward:Boolean=true;
+		private var _isFitStage:Boolean=true;//是否拉伸_cameraTarget适应舞台
+		private var _resizeMan:ResizeManager;
 		
 		private var _focus:Point;
 		private var _mapSize:Point;
@@ -70,8 +75,17 @@
 			super.init(info);
 			_cameraTarget=info.cameraTarget;
 			_cameraTargetInitPos=new Point(_cameraTarget.x,_cameraTarget.y);
+			_cameraTargetInitScale=new Point(_cameraTarget.scaleX,_cameraTarget.scaleY);
+			_resizeMan=_myGame.myGlobal.resizeMan;
 			_mapSize=new Point(info.mapWidth,info.mapHeight);
+			_game.global.stage.addEventListener(Event.RESIZE,onStageResize);
+			onStageResize();
 			setFocus(info.focusX,info.focusY);
+		}
+		
+		private function onStageResize(e:Event=null):void{
+			_cameraTarget.scaleY=_resizeMan.curHScale;
+			_cameraTarget.scaleX=_cameraTarget.scaleY;
 		}
 		
 		/**
@@ -80,8 +94,8 @@
 		 * @param	y 0.01~0.99
 		 */
 		public function setFocus(x:Number=0.5,y:Number=0.5):void{
-			x=Math.min(Math.max(x,0.01),0.99);
-			y=Math.min(Math.max(y,0.01),0.99);
+			x=x>0.99?0.99:x<0.01?0.01:x;
+			y=y>0.99?0.99:y<0.01?0.01:y;
 			_focus||=new Point();
 			_focus.setTo(x,y);
 			
@@ -93,14 +107,16 @@
 			_min=FuncUtil.localXY_2(_min,_cameraTarget);
 			_min.setTo(int(_min.x+0.9),int(_min.y+0.9));
 			
+			//
 			var fpt:Point=new Point(stageW*(1-_focus.x),stageH*(1-_focus.y));
 			fpt=FuncUtil.localXY_2(fpt,_cameraTarget);
+			
 			_max||=new Point();
 			_max.setTo(_mapSize.x-fpt.x, _mapSize.y-fpt.y);
 			_max.setTo(int(_max.x),int(_max.y));
 			
 			_position||=new Point();
-			_position.setTo(_min.x,_min.y);
+			_position.setTo(_min.x,_min.y);	
 		}
 		
 		/**绑定相机到一个位置上，位置可以每一帧改变, isRightNow:表示立即到这个位置不执行缓动*/
@@ -164,12 +180,12 @@
 			
 			var x:int=int(_position.x)+vx;
 			var y:int=int(_position.y)+vy;
-			x=Math.min(Math.max(x,_min.x),_max.x);
-			y=Math.min(Math.max(y,_min.y),_max.y);
+			x=x>_max.x?_max.x:x<_min.x?_min.x:x;
+			y=y>_max.y?_max.y:y<_min.y?_min.y:y;
 			
 			vx=x-_position.x;
 			vy=y-_position.y;
-
+			
 			if(vx!=0||vy!=0){
 				dispatchMoveEvent(int(vx),int(vy));
 				setPosition(x,y);
@@ -191,13 +207,13 @@
 		}
 		
 		private function setPosition(x:int,y:int):void{
-			x=Math.min(Math.max(x,_min.x),_max.x);
-			y=Math.min(Math.max(y,_min.y),_max.y);
+			x=x>_max.x?_max.x:x<_min.x?_min.x:x;
+			y=y>_max.y?_max.y:y<_min.y?_min.y:y;
 			_position.x=x;
 			_position.y=y;
 			
-			_cameraTarget.x=-(_position.x-_min.x/*int(_size.x*_focus.x)*/);
-			_cameraTarget.y=-(_position.y-_min.y/*int(_size.y*_focus.y)*/);
+			_cameraTarget.x=-(_position.x-_min.x)*_cameraTarget.scaleX;
+			_cameraTarget.y=-(_position.y-_min.y)*_cameraTarget.scaleY;
 		}
 		
 		/**返回多个目标的中心*/
@@ -245,6 +261,15 @@
 			_cameraTarget.parent.y=_shakeTargetInitPos.y;
 		}
 		
+		/**
+		 * 外部每帧调用这个函数实现相机逐渐远/近的视觉效果
+		 * @param	ratio (0~1)0:最近的效果 1:最远效果
+		 */
+		public function setDistance(ratio:Number):void{
+			ratio=ratio>1?1:ratio<0?0:ratio;
+			
+		}
+		
 		public function setAllowScorll(value:Boolean):void{
 			_isAllowScorll=value;
 		}
@@ -257,10 +282,17 @@
 			_isAllowBackward=value;
 		}
 		
+		public function setFitStage(value:Boolean):void{
+			_isFitStage=value;
+		}
+		
 		override protected function onDestroy():void{
+			_game.global.stage.removeEventListener(Event.RESIZE,onStageResize);
 			stopCurShake();
 			_cameraTarget.x=_cameraTargetInitPos.x;
 			_cameraTarget.y=_cameraTargetInitPos.y;
+			_cameraTarget.scaleX=_cameraTargetInitScale.x;
+			_cameraTarget.scaleY=_cameraTargetInitScale.y;
 			_cameraTarget=null;
 			_position=null;
 			_targetPos=null;
@@ -274,6 +306,9 @@
 			_mapSize=null;
 			_min=null;
 			_max=null;
+			_cameraTargetInitPos=null;
+			_cameraTargetInitScale=null;
+			_resizeMan=null;
 			super.onDestroy();
 		}
 		
