@@ -167,8 +167,12 @@
 			if (!disObj.parent) throw new Error("FuncUtil::globalXY()传进的对象不在显示列表!");
 			
 			//记录localPt,避免localPt与out引用相同，导致错误
-			var localX:Number=localPt.x;
-			var localY:Number=localPt.y;
+			var localX:Number;
+			var localY:Number;
+			if(localPt){
+				localX=localPt.x;
+				localY=localPt.y;
+			}
 			
 			if(!out)out=new Point(disObj.x,disObj.y);
 			else out.setTo(disObj.x,disObj.y);
