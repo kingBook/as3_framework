@@ -193,12 +193,31 @@ package g{
 			}
 		}
 
-		public function resizeBg(obj:DisplayObject):void
-		{
+		public function resizeBg_middle(obj:DisplayObject):void{
 			obj.scaleX = obj.scaleY = curMaxScale;
 			obj.x = curWidth / 2;
 			obj.y = curHeight / 2;
 		}
+		
+		public function resizeBg_topLeft(obj:DisplayObject):void{
+			obj.scaleX = obj.scaleY = curMaxScale;
+			var targetCenterX:Number=curWidth/2;
+			var targetCenterY:Number=curHeight/2;
+			var curCenterX:Number=sWidth/2*curMaxScale;
+			var curCenterY:Number=sHeight/2*curMaxScale;
+			var ox:Number=targetCenterX-curCenterX;
+			var oy:Number=targetCenterY-curCenterY;
+			
+			var nativePos:Point=_nativePositions[obj];
+			if(!nativePos){
+				nativePos=new Point(obj.x,obj.y);
+				_nativePositions[obj]=nativePos;
+			}
+			obj.x=nativePos.x+ox;
+			obj.y=nativePos.y+oy;
+			
+		}
+		
 		public function getPosition(cors:DisplayObjectContainer, pt:Point, relativePt:Point = null):Point
 		{
 			var rtn:Point = new Point;

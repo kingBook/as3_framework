@@ -16,12 +16,23 @@ package g.objs{
 		private var _sprite:Sprite;
 		private var _friction:Number;
 		private var _isScorll:Boolean;
+		private var _isFitStage:Boolean;
 		
 		public function MapBg(){
 			super();
 		}
 		
-		public static function create(mc:MovieClip,parent:Sprite,mapCamera:MapCamera,friction:Number=1,isScorll:Boolean=true):MapBg{
+		/**
+		 * 创建
+		 * @param	mc
+		 * @param	parent
+		 * @param	mapCamera
+		 * @param	friction
+		 * @param	isScorll
+		 * @param	isFitStage 是否拉伸适合舞台（一般用于不需要滚动地图的游戏，MapCamera也不拉伸的情况下）
+		 * @return
+		 */
+		public static function create(mc:MovieClip,parent:Sprite,mapCamera:MapCamera,friction:Number=1,isScorll:Boolean=true,isFitStage:Boolean=false):MapBg{
 			var game:Game=Game.getInstance();
 			var info:*={};
 			info.mc=mc;
@@ -30,6 +41,7 @@ package g.objs{
 			info.viewParent=parent;
 			info.friction=friction;
 			info.isScorll=isScorll;
+			info.isFitStage=isFitStage;
 			return game.createGameObj(new MapBg(),info) as MapBg;
 		}
 		
@@ -37,6 +49,7 @@ package g.objs{
 			super.init(info);
 			_friction=info.friction;
 			_isScorll=info.isScorll;
+			_isFitStage=info.isFitStage;
 			_sprite=_view as Sprite;
 			var mc:MovieClip=info.mc;
 			
@@ -49,6 +62,17 @@ package g.objs{
 			
 			_mapCamera=info.mapCamera;
 			_mapCamera.addEventListener(MapCamera.MOVE,cameraMove);
+			
+			if(_isFitStage){
+				resize();
+				_myGame.myGlobal.resizeMan.addListener(resize);
+			}
+		}
+		
+		private function resize():void{
+			if(_isFitStage){
+				_myGame.myGlobal.resizeMan.resizeBg_topLeft(_sprite);
+			}
 		}
 		
 		private function cameraMove(e:MyEvent):void{
@@ -64,6 +88,10 @@ package g.objs{
 		}
 		
 		override protected function onDestroy():void{
+			if(_isFitStage){
+				_myGame.myGlobal.resizeMan.removeListener(resize);
+				_myGame.myGlobal.resizeMan.removeByNativePos(_sprite);
+			}
 			_bmd.dispose();
 			_mapCamera.removeEventListener(MapCamera.MOVE,cameraMove);
 			_sprite=null;

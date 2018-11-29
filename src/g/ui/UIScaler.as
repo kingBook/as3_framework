@@ -31,7 +31,7 @@ package g.ui{
 		}
 		
 		private function resize():void{
-			if(_mc["bg"]) _myGame.myGlobal.resizeMan.resizeBg(_mc["bg"]);
+			if(_mc["bg"]) _myGame.myGlobal.resizeMan.resizeBg_middle(_mc["bg"]);
 			_myGame.myGlobal.resizeMan.addContainerByNativePos(_mc,_mc["bg"]);
 		}
 		

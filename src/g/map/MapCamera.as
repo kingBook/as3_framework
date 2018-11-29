@@ -60,7 +60,7 @@
 		 * @param	focusY 0.01~0.99
 		 * @return
 		 */
-		public static function create(mapWidth:Number,mapHeight:Number,cameraTarget:DisplayObject,focusX:Number=0.5,focusY:Number=0.5):MapCamera{
+		public static function create(mapWidth:Number,mapHeight:Number,cameraTarget:DisplayObject,focusX:Number=0.5,focusY:Number=0.5,isFitStage:Boolean=true):MapCamera{
 			var game:Game=Game.getInstance();
 			var info:*={};
 			info.mapWidth=mapWidth;
@@ -68,11 +68,13 @@
 			info.cameraTarget=cameraTarget;
 			info.focusX=focusX;
 			info.focusY=focusY;
+			info.isFitStage=isFitStage;
 			return game.createGameObj(new MapCamera(),info) as MapCamera;
 		}
 		
 		override protected function init(info:* = null):void{
 			super.init(info);
+			_isFitStage=info.isFitStage;
 			_cameraTarget=info.cameraTarget;
 			_cameraTargetInitPos=new Point(_cameraTarget.x,_cameraTarget.y);
 			_cameraTargetInitScale=new Point(_cameraTarget.scaleX,_cameraTarget.scaleY);
@@ -84,8 +86,10 @@
 		}
 		
 		private function onStageResize(e:Event=null):void{
-			_cameraTarget.scaleY=_resizeMan.curHScale;
-			_cameraTarget.scaleX=_cameraTarget.scaleY;
+			if(_isFitStage){
+				_cameraTarget.scaleY=_resizeMan.curHScale;
+				_cameraTarget.scaleX=_cameraTarget.scaleY;
+			}
 		}
 		
 		/**
