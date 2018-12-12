@@ -2,7 +2,7 @@
 	import flash.geom.Point;
 	import framework.objs.Component;
 	import framework.objs.GameObject;
-	//根据二元一次方程返回两点间指定抛物高度任意x位置的y坐标
+	//根据一元二次方程返回两点间指定抛物高度任意x位置的y坐标
 	//var parabolaLine:ParabolaLine=ParabolaLine.create(new Point(a.x,a.y),new Point(b.x,b.y));
 	//var y:Number=parabolaLine.getY(a.x);
 	public class ParabolaLine extends Component{

@@ -16,6 +16,7 @@
 		private var _pageID:int;
 		private var _vx:Number;
 		private var _isDoSetPageing:Boolean;
+		private var _isResisePts:Boolean;
 		public var enabledMouse:Boolean=true;
 		
 		/**
@@ -23,14 +24,16 @@
 		 * @param	targets 目标显示对象列表
 		 * @param	pts 每页targets[0]的x坐标
 		 * @param	pageID 初始页id
+		 * @param	isResisePts 改变舞台大小是否更新pts里的坐标
 		 * @return
 		 */
-		public static function create(targets:Array,pts:Vector.<Number>,pageID:int=0):SliderPage{
+		public static function create(targets:Array,pts:Vector.<Number>,pageID:int=0,isResisePts:Boolean=true):SliderPage{
 			var game:Game=Game.getInstance();
 			var info:*={};
 			info.targets=Vector.<DisplayObject>(targets);
 			info.pts=pts;
 			info.pageID=pageID;
+			info.isResisePts=isResisePts;
 			return game.createGameObj(new SliderPage(),info) as SliderPage;
 		}
 		
@@ -40,6 +43,7 @@
 			_pts=info.pts;
 			_pts0=_pts.concat();
 			_pageID=info.pageID;
+			_isResisePts=info.isResisePts;
 			move(_pts[_pageID]-_targets[0].x);
 			_vx=0;
 			_game.global.stage.addEventListener(MouseEvent.MOUSE_DOWN,mouseHandler);
@@ -55,8 +59,10 @@
 		}
 		
 		private function onResize(e:Event=null):void{
-			for(var i:int=0;i<_pts.length;i++){
-				_pts[i]=_pts0[i]*_myGame.myGlobal.resizeMan.curWScale;
+			if(_isResisePts){
+				for(var i:int=0;i<_pts.length;i++){
+					_pts[i]=_pts0[i]*_myGame.myGlobal.resizeMan.curWScale;
+				}
 			}
 		}
 		
