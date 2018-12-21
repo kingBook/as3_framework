@@ -19,7 +19,7 @@
 		private var _pts:Vector.<Number>;
 		private var _pageID:int;
 		private var _vx:Number;
-		private var _isTweenToPtEnd:Boolean;
+		private var _isTweenToPtEnd:Boolean;//用于避免重复发送SCORLL_END事件
 		private var _isDoSetPageing:Boolean;
 		private var _isResisePts:Boolean;
 		private var _isSetTargetsMouseEnabled:Boolean;
@@ -164,8 +164,12 @@
 		}
 		
 		private function gotoPage(pageID:int):void{
-			_pageID=Math.max(Math.min(_pts.length-1,pageID),0);
-			_isDoSetPageing=true;
+			pageID=Math.max(Math.min(_pts.length-1,pageID),0);
+			if(_pageID!=pageID){
+				_pageID=pageID;
+				_isTweenToPtEnd=false;
+				_isDoSetPageing=true;
+			}
 		}
 		
 		private function move(vx:Number):void{
