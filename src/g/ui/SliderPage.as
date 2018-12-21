@@ -1,12 +1,16 @@
 ﻿package g.ui{
+	import flash.display.InteractiveObject;
 	import flash.events.MouseEvent;
 	import framework.game.Game;
+	import g.events.MyEvent;
 	import g.objs.MyObj;
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	/**滑页*/
 	public class SliderPage extends MyObj{
+		public static const SCORLL_END:String="scorllEnd";
+		private var _scorllEndEvent:MyEvent=new MyEvent("scorllEnd");
 		
 		private var _targets:Vector.<DisplayObject>;
 		private var _isMouseDown:Boolean;
@@ -15,8 +19,11 @@
 		private var _pts:Vector.<Number>;
 		private var _pageID:int;
 		private var _vx:Number;
+		private var _isTweenToPtEnd:Boolean;
 		private var _isDoSetPageing:Boolean;
 		private var _isResisePts:Boolean;
+		private var _isSetTargetsMouseEnabled:Boolean;
+		private var _targetsMouseEnabled:Boolean=true;
 		public var enabledMouse:Boolean=true;
 		
 		/**
@@ -25,15 +32,17 @@
 		 * @param	pts 每页targets[0]的x坐标
 		 * @param	pageID 初始页id
 		 * @param	isResisePts 改变舞台大小是否更新pts里的坐标
+		 * @param	isSetTargetsMouseEnabled 滚动时禁止点击target(防止在滚动时触发点击target)
 		 * @return
 		 */
-		public static function create(targets:Array,pts:Vector.<Number>,pageID:int=0,isResisePts:Boolean=true):SliderPage{
+		public static function create(targets:Array,pts:Vector.<Number>,pageID:int=0,isResisePts:Boolean=true,isSetTargetsMouseEnabled:Boolean=true):SliderPage{
 			var game:Game=Game.getInstance();
 			var info:*={};
 			info.targets=Vector.<DisplayObject>(targets);
 			info.pts=pts;
 			info.pageID=pageID;
 			info.isResisePts=isResisePts;
+			info.isSetTargetsMouseEnabled=isSetTargetsMouseEnabled;
 			return game.createGameObj(new SliderPage(),info) as SliderPage;
 		}
 		
@@ -44,6 +53,7 @@
 			_pts0=_pts.concat();
 			_pageID=info.pageID;
 			_isResisePts=info.isResisePts;
+			_isSetTargetsMouseEnabled=info.isSetTargetsMouseEnabled;
 			move(_pts[_pageID]-_targets[0].x);
 			_vx=0;
 			_game.global.stage.addEventListener(MouseEvent.MOUSE_DOWN,mouseHandler);
@@ -55,6 +65,9 @@
 		private function mouseHandler(e:MouseEvent):void{
 			if(enabledMouse){
 				setMouseDown(e.type==MouseEvent.MOUSE_DOWN);
+			}
+			if(e.type==MouseEvent.MOUSE_DOWN){
+				_isTweenToPtEnd=false;
 			}
 		}
 		
@@ -77,6 +90,7 @@
 				else if(target0.x>xmax)_vx*=0.2;
 				move(_vx);
 				_xmouse=_game.global.stage.mouseX;
+				if(Math.abs(_vx)>=1)setTargetsMouseEnabled(false);
 			}else{
 				var nearestPageId:int=getNearestPageID();
 				if(_isDoSetPageing){//强制设置到某页时，如果当前内容页是设定页,则不再强制
@@ -104,6 +118,29 @@
 		private function tweenToPt(friction:Number,pt:Number):void{
 			_vx=(pt-_targets[0].x)*friction;
 			move(_vx);
+			if(Math.abs(_vx)<=2){
+				if(!_isTweenToPtEnd){
+					dispatchEvent(_scorllEndEvent);
+					setTargetsMouseEnabled(true);
+					_isTweenToPtEnd=true;
+				}
+			}else{
+				_isTweenToPtEnd=false;
+			}
+		}
+		
+		private function setTargetsMouseEnabled(value:Boolean):void{
+			if(!_isSetTargetsMouseEnabled)return;
+			if(_targetsMouseEnabled==value)return;
+			_targetsMouseEnabled=value;
+			trace(_targetsMouseEnabled);
+			var i:int=_targets.length;
+			while(--i>=0){
+				var target:InteractiveObject=_targets[i] as InteractiveObject;
+				if(target){
+					target.mouseEnabled=_targetsMouseEnabled;
+				}
+			}
 		}
 		
 		public function setMouseDown(value:Boolean):void{
@@ -151,6 +188,7 @@
 			_targets=null;
 			_pts=null;
 			_pts0=null;
+			_scorllEndEvent=null;
 			super.onDestroy();
 		}
 		
