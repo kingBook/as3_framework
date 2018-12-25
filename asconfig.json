@@ -8,12 +8,12 @@
 		"strict": true,
 		"default-frame-rate": 30,
         "default-size": {
-            "width": 800,
-            "height": 600
+            "width": 960,
+            "height": 640
         },
         "verbose-stacktraces": true,
-        "swf-version": 16,
-        "target-player": "11.3"
+        "swf-version": 28,
+        "target-player": "17"
 	},
     "additionalOptions": "-benchmark=false -static-link-runtime-shared-libraries=true"
 }
