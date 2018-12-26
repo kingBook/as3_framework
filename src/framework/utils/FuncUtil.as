@@ -398,6 +398,27 @@
 			return refAng*Mathk.Deg2Rad;
 		}
 		
+		/**
+		 * 获取秒转换为xx:xx的时钟形式字符
+		 * @param	second 秒数
+		 * @param	isHour 如果true那么转换为xx:xx:xx形式否则xx:xx形式
+		 * @return
+		 */
+		public static function getClockString(second:Number,isHour:Boolean=false):String{
+			var result:String;
+			if(isHour){
+				var hour:int=(second/60/60)|0;
+				var minute:int=(second/60-hour*60)|0;
+				var tempSecond:int=(second-hour*60*60-minute*60)|0;
+				result=(hour<10?"0"+hour:hour)+":"+(minute<10?"0"+minute:minute)+":"+(tempSecond<10?"0"+tempSecond:tempSecond);
+			}else{
+				minute=(second/60)|0;
+				tempSecond=(second-minute*60)|0;
+				result=(minute<10?"0"+minute:minute)+":"+(tempSecond<10?"0"+tempSecond:tempSecond);
+			}
+			return result; 
+		}
+		
 		public function FuncUtil() {}
 		
 	}
