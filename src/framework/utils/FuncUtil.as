@@ -419,6 +419,16 @@
 			return result; 
 		}
 		
+		/**
+		 * 返回在time秒内每帧叠加运算能达到total的值
+		 * @param	total 每帧执行加法运算达到的量
+		 * @param	time 时间<秒>
+		 * @param	frameRate 帧频
+		 */
+		public static function getEveryFrameValue(total:Number,time:Number,frameRate:int):Number{
+			return total/time/frameRate;
+		}
+		
 		public function FuncUtil() {}
 		
 	}
