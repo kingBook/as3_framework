@@ -5,8 +5,8 @@
 	 */
 	public class MyData {
 		public static var ptm_ratio:Number = 100;
-		public static var designW:int=800;
-		public static var designH:int=600;
+		public static var designW:int=960;
+		public static var designH:int=640;
 		public static var frameRate:uint = 50;
 		public static var fixedTimestep:Number=0.02;
 		public static var isTesting:Boolean=true;
