@@ -1,4 +1,5 @@
 ﻿package framework.utils {
+	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
@@ -427,6 +428,21 @@
 		 */
 		public static function getEveryFrameValue(total:Number,time:Number,frameRate:int):Number{
 			return total/time/frameRate;
+		}
+		
+		/**返回显示对象的转换成位图的Sprite*/
+		public static function getObjBmpSprite(disObj:DisplayObject):Sprite{
+			var rect:Rectangle=disObj.getBounds(disObj);
+			var bmd:BitmapData=FuncUtil.getBmdFromDisObj(disObj);
+			var bmp:Bitmap=new Bitmap(bmd);
+			bmp.x=rect.x;
+			bmp.y=rect.y;
+			
+			var sp:Sprite=new Sprite();
+			sp.x=disObj.x;
+			sp.y=disObj.y;
+			sp.addChild(bmp);
+			return sp;
 		}
 		
 		public function FuncUtil() {}
