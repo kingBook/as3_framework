@@ -306,6 +306,11 @@
 			return {x:a.x + dx, y:a.y + dy};
 		}
 		
+		/**点在以点1，点2为对角顶点的矩形内*/
+		private function onSegment(x:Number,y:Number,x1:Number,y1:Number,x2:Number,y2:Number):Boolean{
+			return Math.min(x1,x2)<=x&&x<=Math.max(x1,x2)&&Math.min(y1,y2)<=y&&y<=Math.max(y1,y2);
+		}
+		
 		/**Math.PI/180*/
 		public static const Deg2Rad:Number=0.0174532925;
 		/**180/Math.PI*/
