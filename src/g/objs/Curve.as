@@ -4,6 +4,7 @@ package g.objs{
 	import framework.game.Game;
 	import g.objs.MyObj;
 	/**
+	 * https://blog.csdn.net/hzsjun/article/details/24958773
 	 * var curve:Curve=Curve.create();
 	 * var curvePoints:Vector.<Point>=curve.createCurve(originPoints);
 	 * curve.draw(sprite,originPoints,curvePoints);
@@ -36,8 +37,8 @@ package g.objs{
 			//控制点收缩系数 ，经调试0.6较好
 			const scale:Number=0.6;
 			const originCount:int=originPoint.length;
-			var midpoints:Vector.<Point>=new Vector.<Point>();
 			//生成中点       
+			var midpoints:Vector.<Point>=new Vector.<Point>();
 			for(var i:int=0;i<originCount;i++){
 				var nexti:int=(i+1)%originCount;
 				midpoints[i]=new Point((originPoint[i].x + originPoint[nexti].x)/2.0,
