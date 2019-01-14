@@ -50,9 +50,9 @@
 		 * game.createGameObj(new Player(),info);
 		 * @param	obj GameObject子类的实例,如: new Player()
 		 * @param	info 传递给GameObject子类init(info:*=null)函数的info
-		 * @return
+		 * @return 返回创建的游戏对象
 		 */
-		public function createGameObj(obj:GameObject, info:*=null):GameObject{
+		public function createGameObj(obj:GameObject, info:*=null):*{
 			obj.init_internal(this,_gameObjectListProxy,info);
 			return obj;
 		}
