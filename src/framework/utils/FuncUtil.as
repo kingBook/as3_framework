@@ -361,7 +361,7 @@
 			var c0:Number,c1:Number;
 			var dx0:Number,dy0:Number;
 			var dx1:Number,dy1:Number;
-			for(var i:int;true;i++){
+			for(var i:int=0;true;i++){
 				c0=i*(dash+spacing);
 				dx0=cos*c0;
 				dy0=sin*c0;
@@ -374,6 +374,57 @@
 				dx1=cos*c1;
 				dy1=sin*c1;
 				sp.graphics.lineTo(x0+dx1,y0+dy1);
+			}
+		}
+		
+		/**
+		 * 指定点列表画虚线
+		 * @param	sp 线容器
+		 * @param	points {type: Array | Vector} 元素类型为拥有x,y属性的任意对象
+		 * @param	dash 一段线的长度
+		 * @param	spacing 间隔
+		 * @param	thickness 粗细
+		 * @param	color 颜色
+		 * @param	alpha 透明度
+		 * @param	isCap 闭合
+		 */
+		public static function drawDashedWithPoints(sp:Sprite,points:*,dash:Number=6,spacing:Number=6,thickness:Number=NaN,color:uint=0,alpha:Number=1,isCap:Boolean=false):void{
+			sp.graphics.lineStyle(thickness,color,alpha);
+			const len:int=points.length;
+			for(var i:int=0;i<len;i++){
+				var nexti:int=(i+1)%len;
+				
+				var curPt:*=points[i];
+				var nextPt:*=points[nexti];
+				
+				var a:Number=nextPt.y-curPt.y;
+				var b:Number=nextPt.x-curPt.x;
+				var maxLength:Number=Math.sqrt(a*a+b*b);
+				var angleRadian:Number=Math.atan2(a,b);
+				var cos:Number=Math.cos(angleRadian);
+				var sin:Number=Math.sin(angleRadian);
+				
+				var c0:Number,c1:Number;
+				var dx0:Number,dy0:Number;
+				var dx1:Number,dy1:Number;
+				for(var j:int=0;true;j++){
+					c0=j*(dash+spacing);
+					dx0=cos*c0;
+					dy0=sin*c0;
+					sp.graphics.moveTo(curPt.x+dx0,curPt.y+dy0);
+					c1=c0+dash;
+					if(c1>=maxLength){
+						c1=maxLength;
+						break;
+					}
+					dx1=cos*c1;
+					dy1=sin*c1;
+					sp.graphics.lineTo(curPt.x+dx1,curPt.y+dy1);
+				}
+				//不闭合
+				if(!isCap&&nexti>=len-1){
+					break;
+				}
 			}
 		}
 		

@@ -1,6 +1,5 @@
 package framework.debug{
 	import flash.display.DisplayObjectContainer;
-	import flash.display.Sprite;
 	import framework.game.Game;
 	import framework.objs.GameObject;
 	import framework.utils.FuncUtil;
@@ -9,11 +8,11 @@ package framework.debug{
 		
 		private var _fpsSprite:FPSSprite;
 		
-		public static function create(parent:DisplayObjectContainer):void{
+		public static function create(parent:DisplayObjectContainer):*{
 			var game:Game=Game.getInstance();
 			var info:*={};
 			info.parent=parent;
-			game.createGameObj(new FPSDebug(),info);
+			return game.createGameObj(new FPSDebug(),info);
 		}
 		
 		public function FPSDebug(){

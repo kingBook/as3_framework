@@ -72,9 +72,10 @@ public class UserDataEditor:Editor {
 			}
 		}
 		EditorGUILayout.EndHorizontal();*/
-		serializedObject.Update();
+		
 		_list.DoLayoutList();
 		serializedObject.ApplyModifiedProperties();
+		serializedObject.Update();
 	}
 
 	private void drawHeader(Rect rect) {
@@ -179,10 +180,11 @@ public class UserDataEditor:Editor {
 								_editID=_nearestID;
 							}
 						}else if(d1<=SnapDistance){
+							int lineEndId=_nearestID+1<=points.Count-1?_nearestID+1:0;
 							if(Event.current.control){
-								deletePointWithIndex(ref points,_nearestID+1);
+								deletePointWithIndex(ref points,lineEndId);
 							}else{
-								_editID=_nearestID+1;
+								_editID=lineEndId;
 							}
 						}else{
 							Undo.RecordObject(_asTarget,"add point");
@@ -235,12 +237,16 @@ public class UserDataEditor:Editor {
 		for(int i=0;i<count;i++){
 			var p1=points[i];
 			var p2=points[(i+1<count)?i+1:0];
-			float distance=HandleUtility.DistancePointToLine(refPoint,p1,p2);
-			if(distance<nearestLineDistance){
-				nearestLineDistance=distance;
-				_nearestID=i;
-				nearestLineSegment[0]=p1;
-				nearestLineSegment[1]=p2;
+
+			var perp=getPerpendicularPt(refPoint.x,refPoint.y,p1.x,p1.y,p2.x,p2.y);
+			if(onSegment(perp.x,perp.y,p1.x,p1.y,p2.x,p2.y)){
+				float distance=HandleUtility.DistancePointToLine(refPoint,p1,p2);
+				if(distance<nearestLineDistance){
+					nearestLineDistance=distance;
+					_nearestID=i;
+					nearestLineSegment[0]=p1;
+					nearestLineSegment[1]=p2;
+				}
 			}
 		}
 	}
@@ -258,9 +264,12 @@ public class UserDataEditor:Editor {
 			}
 		}
 	}
-	private void drawPoints(ref List<b2Vec2> points){
+	private void drawPoints(ref List<b2Vec2> points,bool isCap=true){
 		int count=points.Count;
-		for(int i=0;i<count;i++){
+		for(int i=0;i<count;i++){ 
+			if(!isCap){
+				if(i>=count-1)break;
+			}
 			Handles.Label(points[i],string.Format("{0}",i));
 			var p1=points[i];
 			var p2=points[(i+1<count)?i+1:0];
@@ -294,6 +303,10 @@ public class UserDataEditor:Editor {
 		//
 		return new Vector2(ppx,ppy);
 
+	}
+
+	private bool onSegment(float x,float y,float x1,float y1,float x2,float y2){
+		return Mathf.Min(x1 , x2) <= x && x <= Mathf.Max(x1 , x2)&&Mathf.Min(y1 , y2) <= y && y <= Mathf.Max(y1 , y2);
 	}
 
 

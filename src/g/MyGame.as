@@ -47,7 +47,10 @@
 			}
 			MyData.isAIR=Capabilities.playerType=="Desktop";
 			//FPS
-			if(MyData.isVisibleFPS)FPSDebug.create(gameRoot);
+			if(MyData.isVisibleFPS){
+				var fpsDebug:FPSDebug=FPSDebug.create(gameRoot);
+				GameObject.dontDestroyOnDestroyAll(fpsDebug);
+			}
 			super.startup(main,gameRoot,stage,info);
 		}
 		/**保存解锁关卡*/
