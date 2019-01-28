@@ -162,7 +162,13 @@
 			return byArr.readObject();
 		}
 		
-		/**全局坐标*/
+		/**
+		 * 全局坐标
+		 * @param	disObj
+		 * @param	localPt 表示disObj内的坐标,如：new Point(disObj.mouseX,disObj.mouseY);
+		 * @param	out
+		 * @return
+		 */
 		public static function globalXY(disObj:DisplayObject, localPt:Point = null,out:Point=null):Point {
 			if (!disObj) throw new Error("FuncUtil::globalXY() 参数disObj不能为null");
 			if (!disObj.parent) throw new Error("FuncUtil::globalXY()传进的对象不在显示列表!");
@@ -179,10 +185,10 @@
 			else out.setTo(disObj.x,disObj.y);
 			
 			if(localPt){
-				out.x+=localX;
-				out.y+=localY;
+				out.x=localX;
+				out.y=localY;
 			}
-			var parentObj:DisplayObjectContainer=disObj.parent;
+			var parentObj:DisplayObject=disObj;
 			while(parentObj){
 				out.x*=parentObj.scaleX;
 				out.y*=parentObj.scaleY;
@@ -494,6 +500,25 @@
 			sp.y=disObj.y;
 			sp.addChild(bmp);
 			return sp;
+		}
+		
+		public static function getGotoPointV(x:Number,y:Number,ptx:Number,pty:Number,speed:Number):*{
+			var dx:Number=ptx-x;
+			var dy:Number=pty-y;
+			var d:Number=Math.sqrt(dx*dx+dy*dy);
+			var radian:Number=Math.atan2(dy,dx);
+			var vy:Number,vy:Number;
+			var isGoto:Boolean;
+			if(d>speed){
+				vx=Math.cos(radian)*speed;
+				vy=Math.sin(radian)*speed;
+				isGoto=false;
+			}else{
+				vx=Math.cos(radian)*d;
+				vy=Math.sin(radian)*d;
+				isGoto=true;
+			}
+			return {vx:vx,vy:vy,isGoto:isGoto};
 		}
 		
 		public function FuncUtil() {}

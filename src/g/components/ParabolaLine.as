@@ -3,7 +3,8 @@
 	import framework.objs.Component;
 	import framework.objs.GameObject;
 	//根据一元二次方程返回两点间指定抛物高度任意x位置的y坐标
-	//var parabolaLine:ParabolaLine=ParabolaLine.create(new Point(a.x,a.y),new Point(b.x,b.y));
+	//var parabolaLine:ParabolaLine=ParabolaLine.create(this);
+	//parabolaLine.setsAndParse(pt1,pt2,waveHeight);
 	//var y:Number=parabolaLine.getY(a.x);
 	public class ParabolaLine extends Component{
 		
@@ -14,19 +15,19 @@
 		private var _b:Number;
 		private var _c:Number;
 		
-		public static function create(gameObj:GameObject,pt1:Point,pt2:Point,waveHeight:Number=140):ParabolaLine{
+		public static function create(gameObj:GameObject):ParabolaLine{
 			var info:*={};
-			info.pt1=pt1;
-			info.pt2=pt2;
-			info.waveHeight=waveHeight;
 			return gameObj.addComponent(ParabolaLine,info) as ParabolaLine;
 		}
 		
 		override protected function init(info:*=null):void{
 			super.init(info);
-			_startPt=info.pt1;
-			_endPt=info.pt2;
-			parse(info.waveHeight);
+		}
+		
+		public function setsAndParse(pt1:Point,pt2:Point,waveHeight:Number=140):void{
+			_startPt=pt1;
+			_endPt=pt2;
+			parse(waveHeight);
 		}
 		
 		private function parse(waveHeight:Number):void{
