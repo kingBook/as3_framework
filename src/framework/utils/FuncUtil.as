@@ -507,7 +507,7 @@
 			var dy:Number=pty-y;
 			var d:Number=Math.sqrt(dx*dx+dy*dy);
 			var radian:Number=Math.atan2(dy,dx);
-			var vy:Number,vy:Number;
+			var vx:Number,vy:Number;
 			var isGoto:Boolean;
 			if(d>speed){
 				vx=Math.cos(radian)*speed;
