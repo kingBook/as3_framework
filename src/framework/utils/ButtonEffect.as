@@ -1,21 +1,9 @@
-﻿/**
- * ButtonEffect.to(mc,{glow:{color:0x00FFFF},isSwapChildId:true});
- * glow:Object
- * params:
- * 	color:uint;
- * --------------------------------------------
- * ButtonEffect.to(mc,{scale:{f:0.2},isSwapChildId:true});
- * scale:Object
- * params:
- *	f:Number;//0~1
- */
-
-package framework.utils {
+﻿package framework.utils {
 	import flash.display.DisplayObject;
 	import flash.events.MouseEvent;
+	import flash.filters.GlowFilter;
 	public final class ButtonEffect {
 		private static var _bfArr:Array = [];
-		//private var _tweenMax:TweenMax;
 		private var _target:DisplayObject;
 		private var _vars:Object;
 		private var _noteScaleX:Number, _noteScaleY:Number;
@@ -42,15 +30,21 @@ package framework.utils {
 			}
 			if (_vars["glow"]) {
 				addOrRemoveFilter(true);
+				isSwapChildId=_vars["isSwapChildId"] != undefined?_vars["isSwapChildId"]:true;
+				if(isSwapChildId)swapToTop();
 			}
 			if (_vars["scale"]) {
 				var f:Number = Number(_vars.scale.f) ? Number(_vars.scale.f) : 0.2;
 				_target.scaleX = _noteScaleX + f;
 				_target.scaleY = _noteScaleY + f;
-				var isSwapChildId:Boolean = _vars["isSwapChildId"] != undefined?_vars["isSwapChildId"]:true;
-				if (_target.parent && isSwapChildId) {
-					_target.parent.setChildIndex(_target, _target.parent.numChildren - 1);
-				}
+				var isSwapChildId:Boolean=_vars["isSwapChildId"] != undefined?_vars["isSwapChildId"]:true;
+				if(isSwapChildId)swapToTop();
+			}
+		}
+		
+		private function swapToTop():void{
+			if (_target.parent) {
+				_target.parent.setChildIndex(_target, _target.parent.numChildren - 1);
 			}
 		}
 		
@@ -68,11 +62,11 @@ package framework.utils {
 		}
 		
 		private function addOrRemoveFilter(add:Boolean):void {
-			var color:uint = uint(_vars.glow.color) ? uint(_vars.glow.color) : 0x00FFFF;
-			/*if (add)
-				_tweenMax = TweenMax.to(_target, 0, {glowFilter: {alpha: 1, blurX: 10, blurY: 10, color: color, strength: 1}});
-			else
-				_tweenMax = TweenMax.to(_target, 0, {glowFilter: {alpha: 0, blurX: 0, blurY: 0, color: color, strength: 0}});*/
+			var color:uint=uint(_vars.glow.color)?uint(_vars.glow.color):0x00FFFF;
+			var blur:Number=Number(_vars.glow.blur)?Number(_vars.glow.blur):10;
+			var strength:Number=Number(_vars.glow.strength)?Number(_vars.glow.strength):1;
+			if (add) _target.filters=[new GlowFilter(color,1,blur,blur,strength)];
+			else _target.filters=null;
 		}
 		
 		private function destroy():void {
@@ -81,14 +75,12 @@ package framework.utils {
 				_target.scaleY = _noteScaleY;
 				addOrRemoveEventListener(true);
 			}
-			//TweenMax.killTweensOf(_tweenMax);
-			//_tweenMax = null;
 			_vars = null;
 			_target = null;
 		}
 		
 		/**
-		 * ButtonEffect.to(mc,{glow:{color:0x00FFFF}});
+		 * ButtonEffect.to(mc,{glow:{color:0x00FFFF,blur:10,strength:1},isSwapChildId:true});
 		 * glow:Object
 		 * params:
 		 * 	color:uint;
@@ -97,10 +89,6 @@ package framework.utils {
 		 * scale:Object
 		 * params:
 		 *	f:Number;//0~1
-		 *
-		 * @param	target
-		 * @param	vars
-		 * @return
 		 */
 		public static function to(target:DisplayObject, vars:Object):ButtonEffect {
 			return new ButtonEffect(target, vars);
