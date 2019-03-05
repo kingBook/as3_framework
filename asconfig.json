@@ -12,8 +12,8 @@
             "height": 640
         },
         "verbose-stacktraces": true,
-        "swf-version": 28,
-        "target-player": "17"
+        "swf-version": 16,
+        "target-player": "11.3"
 	},
     "additionalOptions": "-benchmark=false -static-link-runtime-shared-libraries=true"
 }
