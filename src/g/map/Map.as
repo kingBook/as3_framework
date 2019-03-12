@@ -132,18 +132,20 @@
 		}
 		
 		private function createWall(body:b2Body):void{
-			var sprite:Sprite=_game.global.layerMan.items2Layer;
+			var sprite2:Sprite=_game.global.layerMan.items2Layer;
+			var sprite3:Sprite=_game.global.layerMan.items3Layer;
+			var sprite4:Sprite=_game.global.layerMan.items4Layer;
 			//创建墙后的clip
 			if(_mc_wallBehindEff&&_mc_wallBehindEff.numChildren>0){
-				MapAnimClip.create(_mc_wallBehindEff,sprite);
+				MapAnimClip.create(_mc_wallBehindEff,sprite2);
 			}
 			//创建墙
 			if(_mc_wall&&_mc_wall.numChildren>0){
-				MapWall.create(_mc_wall,sprite,body);
+				MapWall.create(_mc_wall,sprite3,body);
 			}
 			//创建墙前的clip
 			if(_mc_wallfrontEff&&_mc_wallfrontEff.numChildren>0){
-				MapAnimClip.create(_mc_wallfrontEff,sprite);
+				MapAnimClip.create(_mc_wallfrontEff,sprite4);
 			}
 		}
 		
