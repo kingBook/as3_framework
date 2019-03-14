@@ -192,6 +192,7 @@ package framework.b2Editor{
 					vertices[i].x*=transformData.lossyScale.x;
 					vertices[i].y*=transformData.lossyScale.y;
 				}
+				poly.SetAsVector(vertices,vertices.length);//必须重新设置，否则碰撞检测可能会出错
 			}else if(shape is b2CircleShape){
 				var circle:b2CircleShape=shape as b2CircleShape;
 				var scale:Number=Math.max(transformData.lossyScale.x,transformData.lossyScale.y);
