@@ -16,7 +16,7 @@ public class ExportB2WorldEditor:Editor {
 	public static void ExportToXml() {
 #if UNITY_EDITOR
 		exportAssetDatabaseXml();
-		exportSceneXml();
+		exportSceneXml(true);
 
 		/*string[] tags=InternalEditorUtility.tags;
 		string[] layers=InternalEditorUtility.layers;
@@ -24,9 +24,42 @@ public class ExportB2WorldEditor:Editor {
 #endif
 	}
 
+	[MenuItem("B2Editor/BuildAllScenesB2WorldToXML")]
+	public static void ExportAllScenesToXml(){
 #if UNITY_EDITOR
+		string recordActiveScenePath=SceneManager.GetActiveScene().path;
+		exportAssetDatabaseXml();
+		var paths=getAllScenePaths();
+		for(int i=0;i<paths.Length;i++){
+			EditorSceneManager.OpenScene(paths[i],OpenSceneMode.Single);
+			exportSceneXml(false);
+		}
+		if(recordActiveScenePath!=null)EditorSceneManager.OpenScene(recordActiveScenePath,OpenSceneMode.Single);
+		EditorUtility.DisplayDialog("complete","Export all scenes to complete!","OK");
+#endif
+	}
+
+
+
+#if UNITY_EDITOR
+	private static string[] getAllScenePaths(){
+		List<string> paths=new List<string>();
+		string path="Assets";
+		if(Directory.Exists(path)){
+			var dirctory=new DirectoryInfo(path);
+			var files=dirctory.GetFiles("*",SearchOption.AllDirectories);
+			for(int i=0;i<files.Length;i++){
+				if(files[i].Extension==".meta")continue;
+				if(files[i].Extension==".unity"){
+					paths.Add(files[i].FullName);
+				}
+			}
+		}
+		return paths.ToArray();
+	}
+
 	/**导出场景*/
-	private static void exportSceneXml() {
+	private static void exportSceneXml(bool isDisplayDialog=true) {
 		XmlDocument xml = new XmlDocument();
 		XmlDeclaration declaration = xml.CreateXmlDeclaration("1.0","UTF_8",null);
 		xml.AppendChild(declaration);
@@ -46,7 +79,9 @@ public class ExportB2WorldEditor:Editor {
 		//Debug.Log(formatXml(xml));
 		System.DateTime now = System.DateTime.Now;
 		//
-		EditorUtility.DisplayDialog("complete","Export "+scene.name+" to complete!","OK");
+		if(isDisplayDialog){
+			EditorUtility.DisplayDialog("complete","Export "+scene.name+" to complete!","OK");
+		}
 		//Debug.LogFormat("export {0}.xml   {1}:{2}:{3}",scene.name,now.Hour,now.Minute,now.Second);
 	}
 
