@@ -66,6 +66,7 @@ public class b2Controller
 			
 		//Attempted to remove a body that was not attached?
 		//b2Settings.b2Assert(bEdge != null);
+		if(edge==null)return;//add By kingBook 2019/3/15 11:48
 		
 		if (edge.prevBody)
 			edge.prevBody.nextBody = edge.nextBody;

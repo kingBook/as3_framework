@@ -1,4 +1,4 @@
-package g.objs{
+package g.map{
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.MovieClip;
@@ -8,6 +8,7 @@ package g.objs{
 	import framework.utils.FuncUtil;
 	import g.map.MapCamera;
 	import g.events.MyEvent;
+	import g.objs.DisplayObj;
 	
 	public class MapBg extends DisplayObj{
 		

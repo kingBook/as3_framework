@@ -1,4 +1,4 @@
-package g.objs{
+package g.map{
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
@@ -6,6 +6,7 @@ package g.objs{
 	import framework.objs.Clip;
 	import framework.game.Game;
 	import framework.utils.FuncUtil;
+	import g.objs.DisplayObj;
 	
 	public class MapAnimClip extends DisplayObj{
 		

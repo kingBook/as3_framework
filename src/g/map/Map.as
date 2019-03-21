@@ -14,9 +14,9 @@
 	import framework.utils.LibUtil;
 	import g.Assets;
 	import g.MyData;
-	import g.objs.MapAnimClip;
-	import g.objs.MapBg;
-	import g.objs.MapWall;
+	import g.map.MapAnimClip;
+	import g.map.MapBg;
+	import g.map.MapWall;
 	import g.objs.MyObj;
 	import g.tiled.TileBase;
 	import g.tiled.Tilemap;

@@ -1,4 +1,4 @@
-package g.objs{
+package g.map{
 	import Box2D.Collision.Shapes.b2Shape;
 	import Box2D.Common.Math.b2Vec2;
 	import Box2D.Dynamics.b2Body;
@@ -14,6 +14,7 @@ package g.objs{
 	import g.MyData;
 	import g.map.MapCamera;
 	import g.events.MyEvent;
+	import g.objs.DisplayObj;
 	
 	public class MapWall extends DisplayObj{
 		
