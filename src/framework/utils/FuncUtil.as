@@ -435,6 +435,29 @@
 		}
 		
 		/**
+		 * 指定点列表画线
+		 * @param	points {type: Array | Vector} 元素类型为拥有x,y属性的任意对象
+		 * @param	graphics graphics
+		 * @param	thickness 粗细
+		 * @param	color 颜色
+		 * @param	alpha 透明度
+		 * @param	isCap 闭合
+		 */
+		public static function drawPoints(points:*,graphics:Graphics,thickness:Number=1,color:uint=0,alpha:Number=1,isCap:Boolean=false):void{
+			graphics.lineStyle(thickness,color,alpha);
+			for(var i:int=0;i<points.length;i++){
+				if(i==0){
+					graphics.moveTo(points[i].x,points[i].y);
+				}else{
+					graphics.lineTo(points[i].x,points[i].y);
+					if(i>=points.length-1&&isCap){
+						graphics.lineTo(points[0].x,points[0].y);
+					}
+				}
+			}
+		}
+		
+		/**
 		 * 获取反射角(单位:弧度)
 		 * @param	reInAng 反向入射角
 		 * @param	normalAng 法线角
@@ -519,6 +542,13 @@
 				isGoto=true;
 			}
 			return {vx:vx,vy:vy,isGoto:isGoto};
+		}
+		
+		/**返回两个点之间的距离*/
+		public static function get2PointDistance(x1:Number,y1:Number,x2:Number,y2:Number):Number{
+			var dx:Number=x2-x1;
+			var dy:Number=y2-y1;
+			return Math.sqrt(dx*dx+dy*dy);
 		}
 		
 		public function FuncUtil() {}
