@@ -219,16 +219,21 @@
 			return rotation;
 		}
 		
-		/**计算出两个Flash角度[-180°,180°]的差,并返回这个差的值*/
+		/**计算出两个Flash角度[-180°,180°]的差(取到达目标角度的最近旋转方向),并返回这个差*/
 		public static function getFlashRotationOffset(rotation:Number,targetRotation:Number):Number{
 			rotation=getFlashRotationTo360(rotation);
 			targetRotation=getFlashRotationTo360(targetRotation);
-			return targetRotation-rotation;
+			var offset:Number=targetRotation-rotation;
+			if(Math.abs(offset)>180){
+				var reDir:int=offset>=0?-1:1;
+				offset=reDir*(360-Math.abs(offset));
+			}
+			return offset;
 		}
 		
 		/**将Flash角度[-180°,180°]转换为[0°,360°]的值,并返回转换后的值*/
 		public static function getFlashRotationTo360(rotation:Number):Number{
-			rotation=getRotationToFlash();
+			rotation=getRotationToFlash(rotation);
 			if(rotation<0) rotation+=360;
 			return rotation;
 		}
