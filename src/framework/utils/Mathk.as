@@ -211,7 +211,7 @@
 			return getPointOnLineDirction(checkPos.x,checkPos.y, pt1.x,pt1.y, pt2.x,pt2.y,ref);
 		}
 		
-		/**将大于180°或小于-180°的角度转换为-180°~180之间，并返回转换后的角度*/
+		/**将任意角度转换为[-180°,180°]，并返回转换后的角度*/
 		public static function getRotationToFlash(rotation:Number):Number{
 			rotation%=360;
 			if     (rotation>180)rotation-=360;
@@ -219,17 +219,16 @@
 			return rotation;
 		}
 		
-		/**计算出两个Flash角度(-180°~180°)之间的差,并返回这个差的值*/
+		/**计算出两个Flash角度[-180°,180°]的差,并返回这个差的值*/
 		public static function getFlashRotationOffset(rotation:Number,targetRotation:Number):Number{
-			//rotation=getRotationToFlash();
 			rotation=getFlashRotationTo360(rotation);
 			targetRotation=getFlashRotationTo360(targetRotation);
 			return targetRotation-rotation;
 		}
 		
-		/**将Flash角度(-180°~180°)转换为0°~360°之间的值,并返回转换后的值*/
+		/**将Flash角度[-180°,180°]转换为[0°,360°]的值,并返回转换后的值*/
 		public static function getFlashRotationTo360(rotation:Number):Number{
-			//rotation=getRotationToFlash();
+			rotation=getRotationToFlash();
 			if(rotation<0) rotation+=360;
 			return rotation;
 		}
