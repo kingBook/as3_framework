@@ -15,6 +15,8 @@ public class Array<T> : IList<T>
 	[HideInInspector]
 	public bool isEdit=false;
 	[HideInInspector]
+	public bool append=false;
+	[HideInInspector]
 	public float curveRatio=0.1f;
 #endif //end UNITY_EDITOR
 
@@ -112,7 +114,6 @@ public class Array<T> : IList<T>
         return list.GetEnumerator();
     }
 }
-
 #region 基础数据类型
 
 [Serializable]

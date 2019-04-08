@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
-[CustomEditor(typeof(CharPoints))]
-public class CharPointsEditor : Editor{
-    private CharPoints _asTarget;
+[CustomEditor(typeof(LocalPoints))]
+public class LocalPointsEditor : Editor{
+    private LocalPoints _asTarget;
 	private ReorderableList _reorderableList;
 
 	private const float SnapDistance=4;
@@ -14,7 +14,7 @@ public class CharPointsEditor : Editor{
 	private bool _isMousePress;
 
 	private void OnEnable(){
-        _asTarget=target as CharPoints;
+        _asTarget=target as LocalPoints;
 
 		_reorderableList=new ReorderableList(serializedObject,serializedObject.FindProperty("_paths"),true,true,true,true);
         _reorderableList.drawHeaderCallback=drawHeader;
@@ -47,8 +47,8 @@ public class CharPointsEditor : Editor{
 
 		var gameObjPos=_asTarget.gameObject.transform.position;
         Vector2Array vector2s=new Vector2Array();
-		vector2s.Add(new Vector2(-1+gameObjPos.x,-1+gameObjPos.y));
-		vector2s.Add(new Vector2(1+gameObjPos.x,1+gameObjPos.y));
+		vector2s.Add(new Vector2(-1,-1));
+		vector2s.Add(new Vector2(1,1));
 
         vector2s.listID=listID;//记录Drawer中使用的id
 		_asTarget.paths.Add(vector2s);
@@ -87,7 +87,7 @@ public class CharPointsEditor : Editor{
 
 	private void onSceneGUIAppendPointsHandler(ref Vector2Array points){
 		HandleUtility.Repaint();
-		
+		var gameObjPos=_asTarget.gameObject.transform.position;
 		//鼠标位置
 		var mousePos=Event.current.mousePosition;
 		mousePos=HandleUtility.GUIPointToWorldRay(mousePos).origin;
@@ -100,7 +100,7 @@ public class CharPointsEditor : Editor{
 						var mouseGUI=HandleUtility.WorldToGUIPoint(mousePos);
 						//Debug.Log("Insert");
 						Undo.RecordObject(_asTarget,"add point");
-						points.Insert(points.Count,new Vector2(mousePos.x,mousePos.y));
+						points.Insert(points.Count,new Vector2(mousePos.x-gameObjPos.x,mousePos.y-gameObjPos.y));
 						_editID=points.Count-1;
 					}
 				}else if(eventType==EventType.MouseUp){
@@ -110,10 +110,11 @@ public class CharPointsEditor : Editor{
 				if(!_isMousePress){//鼠标没有按下时
 					var cpt=new Vector2(mousePos.x,mousePos.y);
 
-					int nearestId=getNearestPointId(points,cpt);
-					float d=Vector2.Distance(cpt,points[nearestId])*100;
+					int nearestId=getNearestPointId(points,new Vector2(cpt.x-gameObjPos.x,cpt.y-gameObjPos.y));
+					Vector2 nearestWorldPt=new Vector2(points[nearestId].x+gameObjPos.x,points[nearestId].y+gameObjPos.y);
+					float d=Vector2.Distance(cpt,nearestWorldPt)*100;
 					if(nearestId>-1 && d<=SnapDistance){
-						cpt.Set(points[nearestId].x,points[nearestId].y);
+						cpt.Set(nearestWorldPt.x,nearestWorldPt.y);
 						//Debug.Log("_editID:"+_editID);
 						_editID=nearestId;
 					}else{
@@ -132,14 +133,14 @@ public class CharPointsEditor : Editor{
 
 	private void onSceneGUIEditPointsHandler(ref Vector2Array points){
 		HandleUtility.Repaint();
-		
+		var gameObjPos=_asTarget.gameObject.transform.position;
 		//鼠标位置
 		var mousePos=Event.current.mousePosition;
 		mousePos=HandleUtility.GUIPointToWorldRay(mousePos).origin;
-
+		var localMousePos=new Vector2(mousePos.x-gameObjPos.x,mousePos.y-gameObjPos.y);
 		//寻找最近线段
 		Vector2[] nearestLineSegment=new Vector2[2];
-		findSetNearestLineSegment(mousePos,ref points,ref nearestLineSegment);
+		findSetNearestLineSegment(localMousePos,ref points,ref nearestLineSegment);
 
 		if(Event.current.isMouse) {
 			EventType eventType=Event.current.type;
@@ -147,8 +148,8 @@ public class CharPointsEditor : Editor{
 				if(eventType==EventType.MouseDown){
 					_isMousePress=true;
 					var mouseGUI=HandleUtility.WorldToGUIPoint(mousePos);
-					var nearestGUI0=HandleUtility.WorldToGUIPoint(nearestLineSegment[0]);
-					var nearestGUI1=HandleUtility.WorldToGUIPoint(nearestLineSegment[1]);
+					var nearestGUI0=HandleUtility.WorldToGUIPoint(new Vector2(nearestLineSegment[0].x+gameObjPos.x,nearestLineSegment[0].y+gameObjPos.y));
+					var nearestGUI1=HandleUtility.WorldToGUIPoint(new Vector2(nearestLineSegment[1].x+gameObjPos.x,nearestLineSegment[1].y+gameObjPos.y));
 					//float mouseToNearestLineSegment=HandleUtility.DistancePointToLineSegment(mouseGUI,nearestGUI0,nearestGUI1);
 					float d0=Vector2.Distance(mouseGUI,nearestGUI0);
 					float d1=Vector2.Distance(mouseGUI,nearestGUI1);
@@ -171,9 +172,9 @@ public class CharPointsEditor : Editor{
 						}else{
 							//Debug.Log("Insert id:"+(_nearestID+1));
 							Undo.RecordObject(_asTarget,"add point");
-							points.Insert(_nearestID+1,new Vector2(mousePos.x,mousePos.y));
+							points.Insert(_nearestID+1,new Vector2(mousePos.x-gameObjPos.x,mousePos.y-gameObjPos.y));
 							_editID=_nearestID+1;
-							findSetNearestLineSegment(mousePos,ref points,ref nearestLineSegment);
+							findSetNearestLineSegment(localMousePos,ref points,ref nearestLineSegment);
 						}
 					}
 				}else if(eventType==EventType.MouseUp){
@@ -183,24 +184,26 @@ public class CharPointsEditor : Editor{
 
 				if(!_isMousePress){//鼠标没有按下时
 					//设置控制柄到最近线段的垂线
-					var perp=getPerpendicularPt(mousePos.x,mousePos.y,nearestLineSegment[0].x,nearestLineSegment[0].y,nearestLineSegment[1].x,nearestLineSegment[1].y);
+					var perp=getPerpendicularPt(localMousePos.x,localMousePos.y,nearestLineSegment[0].x,nearestLineSegment[0].y,nearestLineSegment[1].x,nearestLineSegment[1].y);
+					perp.Set(perp.x+gameObjPos.x,perp.y+gameObjPos.y);
 					var perpGUI=HandleUtility.WorldToGUIPoint(perp);
-					var nearestGUI0=HandleUtility.WorldToGUIPoint(nearestLineSegment[0]);
-					var nearestGUI1=HandleUtility.WorldToGUIPoint(nearestLineSegment[1]);
+					var nearestGUI0=HandleUtility.WorldToGUIPoint(new Vector2(nearestLineSegment[0].x+gameObjPos.x,nearestLineSegment[0].y+gameObjPos.y));
+					var nearestGUI1=HandleUtility.WorldToGUIPoint(new Vector2(nearestLineSegment[1].x+gameObjPos.x,nearestLineSegment[1].y+gameObjPos.y));
 					float perpToNearestLineSegment=HandleUtility.DistancePointToLineSegment(perpGUI,nearestGUI0,nearestGUI1);
 					float d0=Vector2.Distance(perpGUI,nearestGUI0);
 					float d1=Vector2.Distance(perpGUI,nearestGUI1);
 					var cpt=new Vector2(mousePos.x,mousePos.y);
 					//垂足不能滑出线段
 					/*if(perpToNearestLineSegment>0.01f){
-						if(d0<d1)perp.Set(nearestLineSegment[0].x,nearestLineSegment[0].y);
-						else perp.Set(nearestLineSegment[1].x,nearestLineSegment[1].y);
+						if(d0<d1)perp.Set(nearestLineSegment[0].x+gameObjPos.x,nearestLineSegment[0].y+gameObjPos.y);
+						else perp.Set(nearestLineSegment[1].x+gameObjPos.x,nearestLineSegment[1].y+gameObjPos.y);
 					}*/
 					//操作点贴紧端点
-					int nearestId=getNearestPointId(points,cpt);
-					float d=Vector2.Distance(cpt,points[nearestId])*100;
+					int nearestId=getNearestPointId(points,new Vector2(cpt.x-gameObjPos.x,cpt.y-gameObjPos.y));
+					Vector2 nearestWorldPt=new Vector2(points[nearestId].x+gameObjPos.x,points[nearestId].y+gameObjPos.y);
+					float d=Vector2.Distance(cpt,nearestWorldPt)*100;
 					if(nearestId>-1 && d<=SnapDistance){
-						cpt.Set(points[nearestId].x,points[nearestId].y);
+						cpt.Set(nearestWorldPt.x,nearestWorldPt.y);
 						//Debug.Log("_editID:"+_editID);
 						_editID=nearestId;
 					}else{
@@ -240,6 +243,7 @@ public class CharPointsEditor : Editor{
 		}
 	}
 	private void editPointHandler(ref Vector2Array points){
+		var gameObjPos=_asTarget.gameObject.transform.position;
 		//Handles.Label(_asTarget.point,string.Format("({0},{1})",_asTarget.point.x,_asTarget.point.y));
 		EditorGUI.BeginChangeCheck();
 		float size=HandleUtility.GetHandleSize(_asTarget.point)*0.05f;
@@ -250,19 +254,24 @@ public class CharPointsEditor : Editor{
 			_asTarget.point=newPoint;
 			//Debug.Log(_editID);
 			if(_editID>-1){
-				points[_editID]=newPoint;
+				points[_editID]=new Vector2(newPoint.x-gameObjPos.x,newPoint.y-gameObjPos.y);
 			}
 		}
 	}
 	private void drawPoints(ref Vector2Array points,bool isCap=true){
+		var gameObjPos=_asTarget.gameObject.transform.position;
 		int count=points.Count;
-		for(int i=0;i<count;i++){ 
-			Handles.Label(points[i],string.Format("{0}",i));
+		for(int i=0;i<count;i++){
+			var p1=points[i];
+			p1=new Vector2(p1.x+gameObjPos.x,p1.y+gameObjPos.y);
+			var p2=points[(i+1<count)?i+1:0];
+			p2=new Vector2(p2.x+gameObjPos.x,p2.y+gameObjPos.y);
+
+			Handles.Label(p1,string.Format("{0}",i));
 			if(!isCap){
 				if(i>=count-1)break;
 			}
-			var p1=points[i];
-			var p2=points[(i+1<count)?i+1:0];
+			
 			if(i==_nearestID){
 				Handles.color=new Color(0,1,0);
 			}else{

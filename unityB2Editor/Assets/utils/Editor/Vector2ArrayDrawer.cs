@@ -17,8 +17,9 @@ public class CharPointsArraVector2Drawer:PropertyDrawer{
         if(!_reorderableListPool.ContainsKey(id)){
             SerializedProperty list=property.FindPropertyRelative("list");//Array<T>的list属性
 			SerializedProperty isEdit=property.FindPropertyRelative("isEdit");
+			SerializedProperty append=property.FindPropertyRelative("append");
 			SerializedProperty curveRatio=property.FindPropertyRelative("curveRatio");
-            _reorderableListPool[id]=createReorderableListWithList(list,isEdit,curveRatio);
+            _reorderableListPool[id]=createReorderableListWithList(list,isEdit,append,curveRatio);
         }
         _reorderableListPool[id].DoList(position);
         EditorGUI.EndProperty();
@@ -26,7 +27,7 @@ public class CharPointsArraVector2Drawer:PropertyDrawer{
     }
 
 
-    private ReorderableList createReorderableListWithList(SerializedProperty list,SerializedProperty isEdit,SerializedProperty curveRatio){
+    private ReorderableList createReorderableListWithList(SerializedProperty list,SerializedProperty isEdit,SerializedProperty append,SerializedProperty curveRatio){
 		ReorderableList orderList=new ReorderableList(list.serializedObject,list,true,true,true,true);
 		orderList.drawHeaderCallback=(Rect rect)=>{
 			EditorGUILayout.BeginHorizontal();
@@ -38,8 +39,25 @@ public class CharPointsArraVector2Drawer:PropertyDrawer{
 			x+=w;
 			remainW-=w;
 
+			w=15;
+			isEdit.boolValue=GUI.Toggle(new Rect(x,rect.y,w,rect.height*0.8f),isEdit.boolValue,"");
+			if(isEdit.boolValue)append.boolValue=false;
+			x+=w;
+			remainW-=w;
+
+			w=25;
+			EditorGUI.LabelField(new Rect(x,rect.y,w,rect.height),"edit",EditorStyles.miniLabel);
+			x+=w;
+			remainW-=w;
+
+			w=15;
+			append.boolValue=GUI.Toggle(new Rect(x,rect.y,w,rect.height*0.8f),append.boolValue,"");
+			if(append.boolValue)isEdit.boolValue=false;
+			x+=w;
+			remainW-=w;
+			
 			w=40;
-			isEdit.boolValue=GUI.Toggle(new Rect(x,rect.y,w,rect.height*0.8f),isEdit.boolValue,"edit");
+			EditorGUI.LabelField(new Rect(x,rect.y,w,rect.height),"append",EditorStyles.miniLabel);
 			x+=w;
 			remainW-=w;
 
