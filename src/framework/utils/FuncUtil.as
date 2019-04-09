@@ -169,7 +169,7 @@
 		 * @param	out
 		 * @return
 		 */
-		public static function globalXY(disObj:DisplayObject, localPt:Point = null,out:Point=null):Point {
+		/*public static function globalXY(disObj:DisplayObject, localPt:Point = null,out:Point=null):Point {
 			if (!disObj) throw new Error("FuncUtil::globalXY() 参数disObj不能为null");
 			if (!disObj.parent) throw new Error("FuncUtil::globalXY()传进的对象不在显示列表!");
 			
@@ -196,6 +196,25 @@
 				out.y+=parentObj.y;
 				parentObj=parentObj.parent;
 			}
+			return out;
+		}*/
+		
+		/**全局坐标*/
+		public static function globalXY(disObj:DisplayObject, localPt:Point = null,out:Point=null):Point {
+			if (!disObj) throw new Error("FuncUtil::globalXY() 参数disObj不能为null");
+			if (!disObj.parent) throw new Error("FuncUtil::globalXY()传进的对象不在显示列表!");
+			
+			localPt||=new Point();
+			var matrix:Matrix=new Matrix(1,0,0,1,localPt.x,localPt.y);
+			matrix.concat(disObj.transform.matrix.clone());
+			var parentObj:DisplayObjectContainer=disObj.parent;
+			while(parentObj){
+				matrix.concat(parentObj.transform.matrix);
+				parentObj=parentObj.parent;
+			}
+			
+			if(!out)out=new Point();
+			out.setTo(matrix.tx,matrix.ty);
 			return out;
 		}
 		
@@ -339,6 +358,31 @@
 			if(!isNaN(tx))matrix.tx=tx;else if(r)matrix.tx=-r.x;
 			if(!isNaN(ty))matrix.ty=ty;else if(r)matrix.ty=-r.y;
 			bmd.draw(disObj,matrix);
+			return bmd;
+		}
+		
+		/**
+		 * 将显示对象转换为BitmapData
+		 * example:
+		 * ----------------------------------------------------------
+		 * 显示对象可以缩放 
+		 * var bmd:BitmapData=getBmdFromDisObj(mc);
+		 * addChild(new Bitmap(bmd));
+		 * ----------------------------------------------------------
+		 * 
+		 * 
+		 * @param	obj
+		 * @param	smoothing
+		 * @return
+		 */
+		public static function getBmdFromScaleDisObj(obj:DisplayObject,smoothing:Boolean=false):BitmapData{
+			var m:Matrix=obj.transform.matrix;
+			var r:Rectangle=obj.getBounds(obj);
+			var w:int=int(r.width*m.a+0.9), h:int=int(r.height*m.d+0.9);
+			var bmd:BitmapData=new BitmapData(w,h,true,0);
+			m.tx=-r.x*m.a;
+			m.ty=-r.y*m.d;
+			bmd.draw(obj,m,null,null,null,smoothing);
 			return bmd;
 		}
 		
