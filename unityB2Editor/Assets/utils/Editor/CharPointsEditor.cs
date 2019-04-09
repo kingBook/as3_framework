@@ -8,7 +8,7 @@ public class CharPointsEditor : Editor{
     private CharPoints _asTarget;
 	private ReorderableList _reorderableList;
 
-	private const float SnapDistance=4;
+	private const float SnapDistance=10;
 	private int _nearestID;
 	private int _editID;
 	private bool _isMousePress;
@@ -111,7 +111,7 @@ public class CharPointsEditor : Editor{
 					var cpt=new Vector2(mousePos.x,mousePos.y);
 
 					int nearestId=getNearestPointId(points,cpt);
-					float d=Vector2.Distance(cpt,points[nearestId])*100;
+					float d=Vector2.Distance(HandleUtility.WorldToGUIPoint(cpt),HandleUtility.WorldToGUIPoint(points[nearestId]));
 					if(nearestId>-1 && d<=SnapDistance){
 						cpt.Set(points[nearestId].x,points[nearestId].y);
 						//Debug.Log("_editID:"+_editID);
@@ -198,7 +198,7 @@ public class CharPointsEditor : Editor{
 					}*/
 					//操作点贴紧端点
 					int nearestId=getNearestPointId(points,cpt);
-					float d=Vector2.Distance(cpt,points[nearestId])*100;
+					float d=Vector2.Distance(HandleUtility.WorldToGUIPoint(cpt),HandleUtility.WorldToGUIPoint(points[nearestId]));
 					if(nearestId>-1 && d<=SnapDistance){
 						cpt.Set(points[nearestId].x,points[nearestId].y);
 						//Debug.Log("_editID:"+_editID);

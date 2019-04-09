@@ -8,7 +8,7 @@ public class LocalPointsEditor : Editor{
     private LocalPoints _asTarget;
 	private ReorderableList _reorderableList;
 
-	private const float SnapDistance=4;
+	private const float SnapDistance=10;
 	private int _nearestID;
 	private int _editID;
 	private bool _isMousePress;
@@ -112,7 +112,7 @@ public class LocalPointsEditor : Editor{
 
 					int nearestId=getNearestPointId(points,new Vector2(cpt.x-gameObjPos.x,cpt.y-gameObjPos.y));
 					Vector2 nearestWorldPt=new Vector2(points[nearestId].x+gameObjPos.x,points[nearestId].y+gameObjPos.y);
-					float d=Vector2.Distance(cpt,nearestWorldPt)*100;
+					float d=Vector2.Distance(HandleUtility.WorldToGUIPoint(cpt),HandleUtility.WorldToGUIPoint(nearestWorldPt));
 					if(nearestId>-1 && d<=SnapDistance){
 						cpt.Set(nearestWorldPt.x,nearestWorldPt.y);
 						//Debug.Log("_editID:"+_editID);
@@ -201,7 +201,7 @@ public class LocalPointsEditor : Editor{
 					//操作点贴紧端点
 					int nearestId=getNearestPointId(points,new Vector2(cpt.x-gameObjPos.x,cpt.y-gameObjPos.y));
 					Vector2 nearestWorldPt=new Vector2(points[nearestId].x+gameObjPos.x,points[nearestId].y+gameObjPos.y);
-					float d=Vector2.Distance(cpt,nearestWorldPt)*100;
+					float d=Vector2.Distance(HandleUtility.WorldToGUIPoint(cpt),HandleUtility.WorldToGUIPoint(nearestWorldPt));
 					if(nearestId>-1 && d<=SnapDistance){
 						cpt.Set(nearestWorldPt.x,nearestWorldPt.y);
 						//Debug.Log("_editID:"+_editID);
