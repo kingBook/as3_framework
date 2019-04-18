@@ -18,12 +18,20 @@ funcs.exportMcToPng=function(){
 				if(selections[i].instanceType=="symbol"){
 					const linkageClassName=selections[i].libraryItem.linkageClassName;
 					const itemName=selections[i].libraryItem.name;
+					
 					itemName=itemName.substr(itemName.lastIndexOf("\/")+1);
 					//const instanceName=selections[i].name;
 					
 					const exportName=linkageClassName?linkageClassName:itemName;
 					
 					const filePath=path+"unityB2Editor/Assets/levelsMaterials/"+exportName;
+					const folderPath=filePath.substring(0,filePath.lastIndexOf("/"));
+					
+					if(FLfile.createFolder(folderPath)){
+						//fl.trace("Folder has been created");
+					}else{
+						//fl.trace("Folder already exists");
+					}
 					
 					var exporter=new SpriteSheetExporter();
 					exporter.addSymbol(selections[i].libraryItem,0);

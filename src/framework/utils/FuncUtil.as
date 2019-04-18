@@ -6,6 +6,7 @@
 	import flash.display.FrameLabel;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
+	import flash.filters.GlowFilter;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
@@ -384,6 +385,53 @@
 			m.ty=-r.y*m.d;
 			bmd.draw(obj,m,null,null,null,smoothing);
 			return bmd;
+		}
+		
+		/**返回两32位颜色之间的“差”，参考BitmapData.compare()方法*/
+		public static function getColor32Diff(aColor:uint,bColor:uint):uint{
+			var diff:uint;
+			var aColor24:uint=aColor&0x00FFFFFF;
+			var bColor24:uint=bColor&0x00FFFFFF;
+			if(aColor24==bColor24){
+				var diffA:uint=( ((aColor>>24)&0xFF) - ((bColor>>24)&0xFF) )&0xFF;
+				diff=0x00FFFFFF|(diffA<<24);
+			}else{
+				var diffB:uint=( (aColor24&0xFF) - (bColor24&0xFF) )&0xFF;//最后一个&0xFF小减大时出现负数补码
+				var diffG:uint=( ((aColor24>>>8)&0xFF) - ((bColor24>>>8)&0xFF) )&0xFF;
+				var diffR:uint=( ((aColor24>>>16)&0xFF) - ((bColor24>>>16)&0xFF) )&0xFF;
+				diff=diffB;
+				diff=diff|(diffG<<8);
+				diff=diff|(diffR<<16);
+			}
+			return diff;
+		}
+		
+		/**倾倒填充*/
+		public static function floodFill(sourceBmd:BitmapData,x:int,y:int,color:uint,glowBlur:Number=2):void{
+			const sourcePickColor:uint=sourceBmd.getPixel32(x,y);
+			var oldSourceBmd:BitmapData=sourceBmd.clone();
+			sourceBmd.floodFill(x,y,color);
+			var diffBmd:BitmapData=sourceBmd.compare(oldSourceBmd) as BitmapData;//比较取出填充部分
+			oldSourceBmd.dispose();
+			if(diffBmd){
+				var diffPickColor:uint=diffBmd.getPixel32(x,y);
+				var diffRect:Rectangle=new Rectangle(0,0,diffBmd.width,diffBmd.height);
+				var glowFilter:GlowFilter=new GlowFilter(diffPickColor&0x00FFFFFF,(diffPickColor>>>24)/0xFF,glowBlur,glowBlur,10);
+				diffBmd.applyFilter(diffBmd,diffRect,new Point(),glowFilter);//描边填充部分
+				//_mc.addChild(new Bitmap(diffBmd));
+				
+				var fillRect:Rectangle=diffBmd.getColorBoundsRect(0xFF000000,0xFF000000,true);
+				var destPoint:Point=new Point(fillRect.x,fillRect.y);
+				
+				/*diffBmd.threshold(diffBmd,fillRect,destPoint,">",0,color,0xFFFFFFFF);
+				var diffBmp:Bitmap=new Bitmap(diffBmd);
+				diffBmp.x=_fillBmp.x;
+				diffBmp.y=_fillBmp.y;
+				_content.addChild(diffBmp);*/
+				
+				sourceBmd.threshold(diffBmd,fillRect,destPoint,"==",sourcePickColor&diffPickColor,color,0xFFFFFFFF);//与初次填充图像对比，更改未填充的边缘像素
+				diffBmd.dispose();
+			}
 		}
 		
 		/**
