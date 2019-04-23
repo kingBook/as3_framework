@@ -374,13 +374,15 @@
 		 * 
 		 * @param	obj
 		 * @param	smoothing
+		 * @param	transparent
+		 * @param	fillColor
 		 * @return
 		 */
-		public static function getBmdFromScaleDisObj(obj:DisplayObject,smoothing:Boolean=false):BitmapData{
+		public static function getBmdFromScaleDisObj(obj:DisplayObject,smoothing:Boolean=false,transparent:Boolean=true,fillColor:uint=0x00000000):BitmapData{
 			var m:Matrix=obj.transform.matrix;
 			var r:Rectangle=obj.getBounds(obj);
 			var w:int=int(r.width*m.a+0.9), h:int=int(r.height*m.d+0.9);
-			var bmd:BitmapData=new BitmapData(w,h,true,0);
+			var bmd:BitmapData=new BitmapData(w,h,transparent,fillColor);
 			m.tx=-r.x*m.a;
 			m.ty=-r.y*m.d;
 			bmd.draw(obj,m,null,null,null,smoothing);
@@ -432,6 +434,57 @@
 				sourceBmd.threshold(diffBmd,fillRect,destPoint,"==",sourcePickColor&diffPickColor,color,0xFFFFFFFF);//与初次填充图像对比，更改未填充的边缘像素
 				diffBmd.dispose();
 			}
+		}
+		
+		/**
+		 * 查找bmd各个角点颜色,如果checkFunc(pixelColor32:uint):Boolean返回true,则进行倾倒填充newColor32
+		 * @param	bmd
+		 * @param	checkFunc function(pixelColor32:uint):Boolean
+		 * @param	newColor32
+		 * @param	edgeOffset 边缘距离
+		 */
+		public static function floodFillOutside(bmd:BitmapData,checkFunc:Function,newColor32:uint,edgeOffset:uint=0):void{
+			var list:Array=[new Point(0,0),new Point(1,0),new Point(1,1),new Point(0,1)];
+			for(var i:int=0;i<list.length;i++){
+				var x:int=list[i].x*(bmd.width-1);
+				var y:int=list[i].y*(bmd.height-1);
+				x=Math.max(edgeOffset,Math.min(bmd.width-1-edgeOffset,x));
+				y=Math.max(edgeOffset,Math.min(bmd.height-1-edgeOffset,y));
+				var pixelColor32:uint=bmd.getPixel32(x,y);
+				if(checkFunc(pixelColor32)){
+					FuncUtil.floodFill(bmd,x,y,newColor32,2);
+				}
+			}
+		}
+		
+		/**
+		 * 查找bmd中与checkColor32匹配的颜色并替换成newColor32
+		 * @param	bmd
+		 * @param	checkColor32
+		 * @param	newColor32
+		 * @param	ignoreAlpha
+		 */
+		public static function replaceBmdColor(bmd:BitmapData,checkColor32:uint,newColor32:uint,ignoreAlpha:Boolean=false):void{
+			var mask:uint=0xFFFFFFFF;
+			if(ignoreAlpha)mask=0x00FFFFFF;
+			bmd.threshold(bmd,bmd.rect,bmd.rect.topLeft,"==",checkColor32,newColor32,mask);
+		}
+		
+		/**
+		 * 返回bitmapData不透明的像素数量
+		 * @param	bmd
+		 * @param	isClone 是否新建bmd副本，为了计算过程不改变bmd本身
+		 * @return
+		 */
+		public static function getBmdColorPixelsCount(bmd:BitmapData,isClone:Boolean=true):uint{
+			if(isClone)bmd=bmd.clone();
+			var threshold:uint=0x00000000;
+			var color:uint=0xFF00FF00;
+			var mask:uint=0xFF000000;
+			var copySource:Boolean=false;
+			var count:uint=bmd.threshold(bmd,bmd.rect,bmd.rect.topLeft,">",threshold,color,mask,copySource);
+			if(isClone)bmd.dispose();
+			return count;
 		}
 		
 		/**
