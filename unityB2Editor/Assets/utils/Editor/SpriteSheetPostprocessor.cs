@@ -65,9 +65,8 @@ public class SpriteSheetPostprocessor:AssetPostprocessor{
 			float frameWidth=float.Parse(ele.GetAttribute("frameWidth"));
 			float frameHeight=float.Parse(ele.GetAttribute("frameHeight"));
 
-			float poX=(frameWidth/2.0f+frameX)/width;
-			float poY=((frameHeight-pivot.y)-(frameHeight-height+frameY));
-			poY/=height;
+			float poX=(pivot.x+frameX)/width;
+			float poY=(height-pivot.y-frameY)/height;
 			
 			var spriteMetaData=new SpriteMetaData();
 			spriteMetaData.name=name;

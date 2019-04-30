@@ -696,6 +696,32 @@
 			return Math.sqrt(dx*dx+dy*dy);
 		}
 		
+		/**细分列表中的点*/
+		public static function subdivisionPoints(points:Vector.<Point>,subdivDistance:Number=10):Vector.<Point>{
+			var result:Vector.<Point>=new Vector.<Point>();
+			for(var i:int=0;i<points.length;i++){
+				var nexti:int=(i+1)%points.length;
+				var cur:Point=points[i];
+				var next:Point=points[nexti];
+				var dNext:Number=Point.distance(cur,next);
+				if(dNext/subdivDistance<1.5){
+					result.push(cur);
+				}else{
+					var segCount:int=(dNext/subdivDistance+0.5)|0;//四舍五入
+					var dSplice:Number=dNext/segCount;//分割距离
+					var angle:Number=Math.atan2(next.y-cur.y,next.x-cur.x);
+					var ox:Number=Math.cos(angle)*dSplice;
+					var oy:Number=Math.sin(angle)*dSplice;
+					for(var j:int=0;j<segCount;j++){
+						result.push(cur);
+						cur=new Point(cur.x+ox,cur.y+oy);
+					}
+				}
+				
+			}
+			return result;
+		}
+		
 		public function FuncUtil() {}
 		
 	}
