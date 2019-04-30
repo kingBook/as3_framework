@@ -90,7 +90,9 @@
 				else if(target0.x>xmax)_vx*=0.2;
 				move(_vx);
 				_xmouse=_game.global.stage.mouseX;
-				if(Math.abs(_vx)>=1)setTargetsMouseEnabled(false);
+				if(Math.abs(_vx)>=1){
+					setTargetsMouseEnabled(false);
+				}
 			}else{
 				var nearestPageId:int=getNearestPageID();
 				if(_isDoSetPageing){//强制设置到某页时，如果当前内容页是设定页,则不再强制
@@ -133,12 +135,12 @@
 			if(!_isSetTargetsMouseEnabled)return;
 			if(_targetsMouseEnabled==value)return;
 			_targetsMouseEnabled=value;
-			trace(_targetsMouseEnabled);
 			var i:int=_targets.length;
 			while(--i>=0){
 				var target:InteractiveObject=_targets[i] as InteractiveObject;
 				if(target){
 					target.mouseEnabled=_targetsMouseEnabled;
+					if(target is Sprite)Sprite(target).mouseChildren=_targetsMouseEnabled;
 				}
 			}
 		}
