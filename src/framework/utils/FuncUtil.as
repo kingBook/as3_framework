@@ -4,6 +4,7 @@
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.FrameLabel;
+	import flash.display.Graphics;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.filters.GlowFilter;
