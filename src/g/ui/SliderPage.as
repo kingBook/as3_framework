@@ -29,7 +29,7 @@
 		/**
 		 * 创建一个x滑页
 		 * @param	targets 目标显示对象列表
-		 * @param	pts 平移所有targets显示目标页时targets[0]的x坐标
+		 * @param	pts 每页targets[0]的x坐标
 		 * @param	pageID 初始页id
 		 * @param	isResisePts 改变舞台大小是否更新pts里的坐标
 		 * @param	isSetTargetsMouseEnabled 滚动时禁止点击target(防止在滚动时触发点击target)
@@ -120,12 +120,12 @@
 		private function tweenToPt(friction:Number,pt:Number):void{
 			_vx=(pt-_targets[0].x)*friction;
 			move(_vx);
-			if(Math.abs(_vx)<0.5){
+			if(Math.abs(_vx)<1){
 				if(!_isTweenToPtEnd){
-					move(pt-_targets[0].x);
+					addVToTargets(pt-_targets[0].x);
+					dispatchEvent(_scorllEndEvent);
 					setTargetsMouseEnabled(true);
 					_isTweenToPtEnd=true;
-					dispatchEvent(_scorllEndEvent);
 				}
 			}else{
 				_isTweenToPtEnd=false;
@@ -176,11 +176,21 @@
 		}
 		
 		private function move(vx:Number):void{
+			var len:Number=Math.abs(vx);
+			if(len<1)return;
+			
+			var dir:int=vx>=0?1:-1;
+			vx=int(len+0.5)*dir;//必须取整，否则反复会出现精度不准确位置
+			
+			addVToTargets(vx);
+		}
+		private function addVToTargets(vx:Number,vy:Number=0):void{
 			var i:int=_targets.length;
 			while (--i>=0){
 				_targets[i].x+=vx;
 			}
 		}
+		
 		
 		override protected function onDestroy():void{
 			_game.global.stage.removeEventListener(MouseEvent.MOUSE_DOWN,mouseHandler);
