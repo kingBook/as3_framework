@@ -10,7 +10,9 @@
 	/**滑页*/
 	public class SliderPage extends MyObj{
 		public static const SCORLL_END:String="scorllEnd";
-		private var _scorllEndEvent:MyEvent=new MyEvent("scorllEnd");
+		public static const ENTER_PAGE:String="enterPage";//除了第一次初始页不派发，之后每次进入新页都派发
+		private var _scorllEndEvent:MyEvent=new MyEvent(SCORLL_END);
+		private var _enterPageEvent:MyEvent=new MyEvent(ENTER_PAGE,{pageId:0});
 		
 		private var _targets:Vector.<DisplayObject>;
 		private var _isMouseDown:Boolean;
@@ -18,6 +20,7 @@
 		private var _pts0:Vector.<Number>;
 		private var _pts:Vector.<Number>;
 		private var _pageID:int;
+		private var _recordScorllEndPageId:int;
 		private var _vx:Number;
 		private var _isTweenToPtEnd:Boolean;//用于避免重复发送SCORLL_END事件
 		private var _isDoSetPageing:Boolean;
@@ -52,9 +55,10 @@
 			_pts=info.pts;
 			_pts0=_pts.concat();
 			_pageID=info.pageID;
+			_recordScorllEndPageId=_pageID;
 			_isResisePts=info.isResisePts;
 			_isSetTargetsMouseEnabled=info.isSetTargetsMouseEnabled;
-			move(_pts[_pageID]-_targets[0].x);
+			addVToTargets(_pts[_pageID]-_targets[0].x);
 			_vx=0;
 			_game.global.stage.addEventListener(MouseEvent.MOUSE_DOWN,mouseHandler);
 			_game.global.stage.addEventListener(MouseEvent.MOUSE_UP,mouseHandler);
@@ -123,9 +127,15 @@
 			if(Math.abs(_vx)<1){
 				if(!_isTweenToPtEnd){
 					addVToTargets(pt-_targets[0].x);
-					dispatchEvent(_scorllEndEvent);
 					setTargetsMouseEnabled(true);
 					_isTweenToPtEnd=true;
+					
+					dispatchEvent(_scorllEndEvent);
+					if(_pageID!=_recordScorllEndPageId){
+						_enterPageEvent.info.pageId=_pageID;
+						dispatchEvent(_enterPageEvent);
+						_recordScorllEndPageId=_pageID;
+					}
 				}
 			}else{
 				_isTweenToPtEnd=false;
@@ -191,7 +201,6 @@
 			}
 		}
 		
-		
 		override protected function onDestroy():void{
 			_game.global.stage.removeEventListener(MouseEvent.MOUSE_DOWN,mouseHandler);
 			_game.global.stage.removeEventListener(MouseEvent.MOUSE_UP,mouseHandler);
@@ -200,6 +209,7 @@
 			_pts=null;
 			_pts0=null;
 			_scorllEndEvent=null;
+			_enterPageEvent=null;
 			super.onDestroy();
 		}
 		
