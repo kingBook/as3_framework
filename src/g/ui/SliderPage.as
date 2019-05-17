@@ -151,7 +151,6 @@
 				var target:InteractiveObject=_targets[i] as InteractiveObject;
 				if(target){
 					target.mouseEnabled=_targetsMouseEnabled;
-					if(target is Sprite)Sprite(target).mouseChildren=_targetsMouseEnabled;
 				}
 			}
 		}
