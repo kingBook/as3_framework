@@ -1,6 +1,8 @@
 ﻿package g.ui{
 	import flash.display.InteractiveObject;
+	import flash.display.Stage;
 	import flash.events.MouseEvent;
+	import flash.geom.Rectangle;
 	import framework.game.Game;
 	import g.events.MyEvent;
 	import g.objs.MyObj;
@@ -28,6 +30,8 @@
 		private var _isSetTargetsMouseEnabled:Boolean;
 		private var _targetsMouseEnabled:Boolean=true;
 		public var enabledMouse:Boolean=true;
+		
+		private var _stageRect:Rectangle;
 		
 		/**
 		 * 创建一个x滑页
@@ -64,6 +68,8 @@
 			_game.global.stage.addEventListener(MouseEvent.MOUSE_UP,mouseHandler);
 			_game.global.stage.addEventListener(Event.RESIZE,onResize);
 			onResize();
+			
+			
 		}
 		
 		private function mouseHandler(e:MouseEvent):void{
@@ -81,6 +87,7 @@
 					_pts[i]=_pts0[i]*_myGame.myGlobal.resizeMan.curWScale;
 				}
 			}
+			checkOutsideStage();
 		}
 		
 		override protected function update():void{
@@ -106,6 +113,32 @@
 				}
 				tweenToPt(0.2,_pts[_pageID]);
 			}
+			
+			//舞台外部的隐藏
+			checkOutsideStage();
+		}
+		
+		private function checkOutsideStage():void{
+			var stage:Stage=_game.global.stage;
+			
+			const offset:int=10;
+			_stageRect=new Rectangle();
+			_stageRect.x=-offset;
+			_stageRect.y=-offset;
+			_stageRect.width=stage.stageWidth+offset;
+			_stageRect.height=stage.stageHeight+offset;
+			
+			for(var i:int=0;i<_targets.length;i++){
+				var target:DisplayObject=_targets[i];
+				var targetRect:Rectangle=target.getBounds(stage);
+				target.visible=targetRect.intersects(_stageRect);
+			}
+			
+			/*var str:String="";
+			for(i=0;i<_targets.length;i++){
+				str+=_targets[i].visible+","
+			}
+			trace(str);*/
 		}
 		
 		private function getNearestPageID():int{
@@ -209,6 +242,7 @@
 			_pts0=null;
 			_scorllEndEvent=null;
 			_enterPageEvent=null;
+			_stageRect=null;
 			super.onDestroy();
 		}
 		
