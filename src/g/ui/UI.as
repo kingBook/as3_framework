@@ -384,7 +384,7 @@
 		override protected function onDestroy():void{
 			unschedule(addAnimtion);
 			destroy(_scaler);
-			if (_view.parent) _view.parent.removeChild(_view);
+			FuncUtil.removeChildPlus(_view);
 			_game.pause=false;
 			_game.global.soundMan.removeEventListener(FrameworkEvent.MUTE,muteHandler);
 			_game.global.soundMan.removeEventListener(FrameworkEvent.MUTE_ONCE,muteOnceHandler);

@@ -59,6 +59,32 @@
 			obj && obj.parent && obj.parent.removeChild(obj);
 		}
 		
+		/**
+		 * 从显示列表中安全的移除一个对象
+		 * @param	obj :DisplayObject 要从显示列表中移除的对象
+		 * @param	isStopSelf Boolean=true 如果true,当obj的类型是MovieClip时则调用stop().
+		 * @param	isRemoveSelf Boolean=true 如果true,从显示列表中移除自身.
+		 * @param	isStopChildren Boolean=true 如果true,所有层级的所有对象,如果类型是MovieClip都调用stop().
+		 * @param	isRemoveChildren 如果true,所有层级的所有对象都从父级移除
+		 */
+		public static function removeChildPlus(obj:DisplayObject,isStopSelf:Boolean=true,isRemoveSelf:Boolean=true,isStopChildren:Boolean=true,isRemoveChildren:Boolean=true):void{
+			isStopSelf && obj && obj.parent && obj.parent.removeChild(obj);
+			if( isStopSelf&&obj is MovieClip)MovieClip(obj).stop();
+			
+			if(isStopChildren||isRemoveChildren){
+				if(obj is DisplayObjectContainer){
+					var container:*=DisplayObjectContainer(obj);
+					var i:int=container.numChildren;
+					var child:DisplayObject;
+					while(--i>=0){
+						child=container.getChildAt(i);
+						removeChildPlus(child,isStopChildren,isRemoveChildren,isStopChildren,isRemoveChildren);
+					}
+				}
+			}
+			
+		}
+		
 		/**返回矩形对象变形后的宽*/
 		public static function getTransformWidth(obj:DisplayObject):Number{
 			var recordMat:Matrix = obj.transform.matrix;
