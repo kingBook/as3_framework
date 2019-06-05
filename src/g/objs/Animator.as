@@ -20,7 +20,7 @@
 		private var _clips:*;
 		private var _parent:DisplayObjectContainer;
 		private var _curClip:*;
-		private var _curAniKey:String;
+		private var _curState:String;
 		private var _transitionConditions:*;
 		private var _childDeth:int=-1;
 		
@@ -35,6 +35,8 @@
 		private const MultipleClipMode:uint=1;
 		private const OneClipMode:uint=2;
 		private var _mode:uint=0;
+		/**false时将禁止update()*/
+		public var enable:Boolean=true;
 		
 		private const ANY_STATE:String = "anyState";
 		
@@ -113,8 +115,9 @@
 			changeCurState(name);
 		}
 		override protected function update():void {
+			if(!enable)return;
 			//指定状态过渡到目标状态
-			var transitionCondition:Array = _transitionConditions[_curAniKey];
+			var transitionCondition:Array = _transitionConditions[_curState];
 			if (transitionCondition) {
 				var i:int = transitionCondition.length, obj:*;
 				while (--i >= 0) {
@@ -136,18 +139,18 @@
 			}
 			
 			if(_mode==OneClipMode){
-				if(_curClip.currentFrame<_clips[_curAniKey][1]){
+				if(_curClip.currentFrame<_clips[_curState][1]){
 					_curClip.nextFrame();
 				}else{
-					_curClip.gotoAndStop(_clips[_curAniKey][0]);
+					_curClip.gotoAndStop(_clips[_curState][0]);
 				}
 			}
 		}
 		private var _changeBeginEvent:Event=new Event("changeBegin");
 		private var _changeEndEvent:Event=new Event("changeEnd");
 		public function changeCurState(name:String):void{
-			if (_curAniKey == name) return;
-			if (_clips[name]) _curAniKey = name;
+			if (_curState == name) return;
+			if (_clips[name]) _curState = name;
 			else trace("警告：发现动作 "+name+" , 为null/undefined，请检查是否正确使用addStateClip或setAllStateClip方法添加");
 			
 			this.dispatchEvent(_changeBeginEvent);//发出改变动作事件
@@ -160,7 +163,7 @@
 				_curClip.scaleY = _scaleY;
 				_curClip.visible= _visible;
 				_curClip.alpha=_alpha;
-				_curClip.gotoAndStop(_clips[_curAniKey][0]);
+				_curClip.gotoAndStop(_clips[_curState][0]);
 			}else{
 				//移除上一个动作
 				if (_curClip) {
@@ -169,7 +172,7 @@
 					if(_curClip is MovieClip)MovieClip(_curClip).gotoAndStop(1);
 				}
 				//切换并添加到显示列表
-				_curClip = _clips[_curAniKey];
+				_curClip = _clips[_curState];
 				if(_curClip){
 					_curClip.x = x;
 					_curClip.y = y;
@@ -273,7 +276,7 @@
 		}
 		
 		public function get curClip():DisplayObject { return _curClip; }
-		public function get curAniKey():String { return _curAniKey; }
+		public function get curState():String { return _curState; }
 		public function getStateData(name:String):DisplayObject{ return _clips[name]; }
 	}
 
