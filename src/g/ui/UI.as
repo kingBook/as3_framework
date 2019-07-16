@@ -1,23 +1,23 @@
 ﻿package g.ui{
-	import g.MyData;
-	import g.MyGame;
-	import g.map.MapData;
-	import g.objs.MyObj;
-	import g.ui.UIScaler;
 	import flash.display.DisplayObject;
 	import flash.display.InteractiveObject;
 	import flash.display.MovieClip;
 	import flash.display.SimpleButton;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
-	import framework.game.Game;
-	import framework.game.UpdateType;
 	import framework.events.FrameworkEvent;
+	import framework.game.Game;
 	import framework.objs.GameObject;
-	import framework.utils.LibUtil;
+	import framework.objs.MoveTo;
 	import framework.system.KeyboardManager;
 	import framework.utils.ButtonEffect;
-	import framework.objs.MoveTo;
+	import framework.utils.FuncUtil;
+	import framework.utils.LibUtil;
+	import g.MyData;
+	import g.MyGame;
+	import g.map.MapData;
+	import g.objs.MyObj;
+	import g.ui.UIScaler;
 	public class UI extends MyObj{
 		
 		public static const TITLE:String="title";

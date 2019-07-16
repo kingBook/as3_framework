@@ -275,9 +275,21 @@
 			}
 		}
 		
-		public function get curClip():DisplayObject { return _curClip; }
+		public function get curClip():* { return _curClip; }
 		public function get curState():String { return _curState; }
-		public function getStateData(name:String):DisplayObject{ return _clips[name]; }
+		/**
+		 * MultipleClipMode: 返回当前动作状态的显示对象
+		 * OneClipMode: 返回当前动作状态帧区间数组[startFrame,endFrame]
+		 * @return
+		 */
+		public function get curStateData():*{return _clips[_curState]}
+		/**
+		 * MultipleClipMode: 返回指定动作状态的显示对象
+		 * OneClipMode: 返回指定动作状态帧区间数组[startFrame,endFrame]
+		 * @param	name 指定的动作状态
+		 * @return
+		 */
+		public function getStateData(name:String):*{ return _clips[name]; }
 	}
 
 }
