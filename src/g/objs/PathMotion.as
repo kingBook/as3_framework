@@ -65,7 +65,8 @@ package g.objs{
 		 * 迭代
 		 * @return 是否到达终点
 		 */
-		public function step():Boolean{
+		public function step(index:int):Boolean{
+			var isGotoIndexPoint:Boolean=false;
 			var target:Point=_path[_id];
 			var dx:Number=target.x-_pos.x;
 			var dy:Number=target.y-_pos.y;
@@ -90,22 +91,23 @@ package g.objs{
 					vy=Math.sin(rad)*offset;
 					
 					_pos.setTo(target.x+vx,target.y+vy);
+					isGotoIndexPoint=(index==_id);
 					//
 					_id++;
 				}else{
 					//走到终点
 					_pos.setTo(target.x,target.y);
-					return true;
+					isGotoIndexPoint=(index==_id);
 				}
 				
 			}else{
 				//d==_speed
 				//走到终点
 				_pos.setTo(target.x,target.y);
-				if(_id<_path.length-1) _id++;
-				else return true;
+				isGotoIndexPoint=(index==_id);
+				if(_id<_path.length-1)_id++;
 			}
-			return false;
+			return isGotoIndexPoint;
 		}
 		
 		public function get x():Number{return _pos.x;}
