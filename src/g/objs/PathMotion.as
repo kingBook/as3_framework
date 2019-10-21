@@ -112,6 +112,7 @@ package g.objs{
 		
 		public function get x():Number{return _pos.x;}
 		public function get y():Number{return _pos.y;}
+		public function get path():Vector.<Point>{return _path;}
 		
 		
 	};
