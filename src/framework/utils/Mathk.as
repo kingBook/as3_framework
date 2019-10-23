@@ -315,6 +315,11 @@
 			return Math.min(x1,x2)<=x&&x<=Math.max(x1,x2)&&Math.min(y1,y2)<=y&&y<=Math.max(y1,y2);
 		}
 		
+		/**返回一个值，如果value的范围超过[min,max]区间则取min或max,否则取value本身*/
+		public static function clamp(value:Number,min:Number,max:Number):Number{
+			return Math.min(Math.max(value,min),max);
+		}
+		
 		/**Math.PI/180*/
 		public static const Deg2Rad:Number=0.0174532925;
 		/**180/Math.PI*/
