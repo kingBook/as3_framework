@@ -30,9 +30,20 @@
 		public function get(key:String):*{
 			return _so.data[key];
 		}
+		/**提取int数据*/
 		public function getInt(key:String,defaultValue:int):int{
-			var i:int=int(_so.data[key])||defaultValue;
-			return i;
+			var value:int=int(_so.data[key])||defaultValue;
+			return value;
+		}
+		/**提取Boolean数据*/
+		public function getBoolean(key:String,defaultValue:Boolean):Boolean{
+			var value:Boolean=Boolean(_so.data[key])||defaultValue;
+			return value;
+		}
+		/**提取String数据*/
+		public function getString(key:String,defaultValue:String):String{
+			var value:String=String(_so.data[key])||defaultValue;
+			return value;
 		}
 		override protected function onDestroy():void{
 			_so=null;
