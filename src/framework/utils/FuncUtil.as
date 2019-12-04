@@ -749,6 +749,40 @@
 			return result;
 		}
 		
+		public static function swapToParentContainer(obj:DisplayObject,parentContainer:DisplayObjectContainer):void{
+			var objMatrix:Matrix=obj.transform.matrix;
+			var nextParent:DisplayObjectContainer=obj.parent;
+			while(nextParent){
+				if(nextParent==parentContainer)break;
+				objMatrix.concat(nextParent.transform.matrix);
+				nextParent=nextParent.parent;
+			}
+			
+			obj.transform.matrix=objMatrix;
+			parentContainer.addChild(obj);
+		}
+		
+		public static function swapToChildContainer(obj:DisplayObject,childContainer:DisplayObjectContainer):void{
+			var parentList:Array=[];
+			var nextParent:DisplayObjectContainer=childContainer;
+			while(nextParent){
+				if(nextParent==obj.parent)break;
+				parentList.push(nextParent);
+				nextParent=nextParent.parent;
+			}
+			
+			var objMatrix:Matrix=obj.transform.matrix;
+			while(parentList.length>0){
+				var parent:DisplayObjectContainer=parentList.pop();
+				var parentMatrix:Matrix=parent.transform.matrix;
+				parentMatrix.invert();
+				objMatrix.concat(parentMatrix);
+			}
+			
+			obj.transform.matrix=objMatrix;
+			childContainer.addChild(obj);
+		}
+		
 		public function FuncUtil() {}
 		
 	}
