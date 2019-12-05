@@ -781,7 +781,7 @@
 			}
 			
 			obj.transform.matrix=objMatrix;
-			if(childIndex>-1)childContainer.addChild(obj,childIndex);
+			if(childIndex>-1)childContainer.addChildAt(obj,childIndex);
 			else childContainer.addChild(obj);
 		}
 		
