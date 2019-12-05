@@ -749,7 +749,7 @@
 			return result;
 		}
 		
-		public static function swapToParentContainer(obj:DisplayObject,parentContainer:DisplayObjectContainer):void{
+		public static function swapToParentContainer(obj:DisplayObject,parentContainer:DisplayObjectContainer,childIndex:int=-1):void{
 			var objMatrix:Matrix=obj.transform.matrix;
 			var nextParent:DisplayObjectContainer=obj.parent;
 			while(nextParent){
@@ -759,10 +759,11 @@
 			}
 			
 			obj.transform.matrix=objMatrix;
-			parentContainer.addChild(obj);
+			if(childIndex>-1)parentContainer.addChildAt(obj,childIndex);
+			else parentContainer.addChild(obj);
 		}
 		
-		public static function swapToChildContainer(obj:DisplayObject,childContainer:DisplayObjectContainer):void{
+		public static function swapToChildContainer(obj:DisplayObject,childContainer:DisplayObjectContainer,childIndex:int=-1):void{
 			var parentList:Array=[];
 			var nextParent:DisplayObjectContainer=childContainer;
 			while(nextParent){
@@ -780,7 +781,8 @@
 			}
 			
 			obj.transform.matrix=objMatrix;
-			childContainer.addChild(obj);
+			if(childIndex>-1)childContainer.addChild(obj,childIndex);
+			else childContainer.addChild(obj);
 		}
 		
 		public function FuncUtil() {}
